@@ -12,7 +12,7 @@ import junit.framework.Assert;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-// Test 
+// Test 2
 
 /*immer mindestens 5 oberer und unterer Rand testen (wenn nötig)
  * TESTS:
