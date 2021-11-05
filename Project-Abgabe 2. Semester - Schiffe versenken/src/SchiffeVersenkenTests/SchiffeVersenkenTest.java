@@ -13,6 +13,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 //Wir haben hier eine Änderung vorgenommen !
+// Aenderung ist angekommen !
 /*immer mindestens 5 oberer und unterer Rand testen (wenn n�tig)
  * TESTS:
  * 	------------Test setShip----------
