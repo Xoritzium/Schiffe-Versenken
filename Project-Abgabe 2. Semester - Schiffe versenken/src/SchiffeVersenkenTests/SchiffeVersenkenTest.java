@@ -12,17 +12,17 @@ import junit.framework.Assert;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-//Wir haben hier eine Ã„nderung vorgenommen !
-// Aenderung ist angekommen !
-/*immer mindestens 5 oberer und unterer Rand testen (wenn nï¿½tig)
+// Test test TEST
+
+/*immer mindestens 5 oberer und unterer Rand testen (wenn nötig)
  * TESTS:
  * 	------------Test setShip----------
  * ==valide Koordinaten
  * ==invalide koordinateneingaben  <1 und >10
- * ==falsch Schiffslï¿½ngen ( Lï¿½nge muss mit Namen ï¿½bereinstimmen)
+ * ==falsch Schiffslängen ( Länge muss mit Namen übereinstimmen)
  * ==Shiff ragt aus dem Spielfeld
  * ==Anzahl gesetzter Schiffe (nicht mehr Schiffe des Regelwerks vorgeben)
- * ==Schiffe dï¿½rfen nicht aneinander stoï¿½en, sich also nicht ï¿½berlappen, Kante and Kante ist ok!
+ * ==Schiffe dürfen nicht aneinander stoßen, sich also nicht überlappen, Kante and Kante ist ok!
  * 
  * 
  * -------- Tests shot--------
@@ -32,7 +32,7 @@ import org.junit.Test;
  * 
  * ------------allgemein--------
  * ==Spieler festlegen
- * ==ï¿½berkreuthandlung der Spielbretter festlegen
+ * ==Überkreuthandlung der Spielbretter festlegen
  */
 public class SchiffeVersenkenTest {
 //////////////// valide Koordinateneingaben
@@ -109,7 +109,7 @@ public class SchiffeVersenkenTest {
 
 	}
 
-////////////////////// falscheSchiffslï¿½ngen: /////////////////////
+////////////////////// falscheSchiffslängen: /////////////////////
 	@Test(expected = InvalideLaengenEingabeException.class)
 	public void testsetShip008()
 			throws InvalideEingabeException, InvalideLaengenEingabeException, InvalideRichtungException {
