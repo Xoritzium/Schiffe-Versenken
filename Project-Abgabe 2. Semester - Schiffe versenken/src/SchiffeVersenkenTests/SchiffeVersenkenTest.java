@@ -12,16 +12,15 @@ import junit.framework.Assert;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-// Test 2
 
 /*immer mindestens 5 oberer und unterer Rand testen (wenn nötig)
  * 
  * 	------------Test setShip----------
  * ==valide Koordinaten
  * ==invalide koordinateneingaben  <1 und >10
- * ==falsch Schiffslängen ( Länge muss mit Namen übereinstimmen)
  * ==Shiff ragt aus dem Spielfeld
  * ==Anzahl gesetzter Schiffe (nicht mehr Schiffe des Regelwerks vorgeben)
+ * ==falsche Schiffslängen ( Länge muss mit Namen übereinstimmen)
  * ==Schiffe dürfen nicht aneinander stoßen, sich also nicht überlappen, Kante and Kante ist ok!
  * 
  * 
@@ -35,7 +34,7 @@ import org.junit.Test;
  * ==Überkreuthandlung der Spielbretter festlegen
  */
 public class SchiffeVersenkenTest {
-//////////////// valide Koordinateneingaben
+//////////////// valide Koordinateneingaben//////////kannn man theoretisch zusammenfasse, sodass ein Test mehrere Asserts hat
 	@Test
 	public void testsetShip001()
 			throws InvalideEingabeException, InvalideLaengenEingabeException, InvalideRichtungException {
@@ -174,11 +173,54 @@ public class SchiffeVersenkenTest {
 		sv.setShip(5, 10, Ship.SUBMARINE, 2, false);
 
 	}
+//////////////////Anzahl der Schiffe übersschritten///////////////
 
 	@Test(excpected = zuVieleSchiffeException)
 	public void testsetShip016() throws InvalideEingabeException, InvalideLaengenEingabeException {
 		SchiffeVersenken sv = new SchiffeVersenkenImpl();
-		sv.setShip(2, 3, Ship.SUBMARINE, 2, false);
+		sv.setShip(1, 1, Ship.SUBMARINE, 2, true);
+		sv.setShip(2, 2, Ship.SUBMARINE, 2, true);
+		sv.setShip(3, 3, Ship.SUBMARINE, 2, true);
+		sv.setShip(4, 5, Ship.SUBMARINE, 2, true);
+		sv.setShip(5, 6, Ship.SUBMARINE, 2, true); // zuviel
+
+	}
+
+	@Test(excpected = zuVieleSchiffeException)
+	public void testsetShip017() throws InvalideEingabeException, InvalideLaengenEingabeException {
+		SchiffeVersenken sv = new SchiffeVersenkenImpl();
+		sv.setShip(1, 1, Ship.DESTROYER, 3, true);
+		sv.setShip(2, 2, Ship.DESTROYER, 3, true);
+		sv.setShip(3, 3, Ship.DESTROYER, 3, true);
+		sv.setShip(4, 5, Ship.DESTROYER, 3, true); // zuviel
+
+	}
+
+	@Test(excpected = zuVieleSchiffeException)
+	public void testsetShip018() throws InvalideEingabeException, InvalideLaengenEingabeException {
+		SchiffeVersenken sv = new SchiffeVersenkenImpl();
+		sv.setShip(1, 1, Ship.BATTLESHIP, 5, true);
+		sv.setShip(2, 2, Ship.BATTLESHIP, 5, true); // zuviel
+
+	}
+
+	//////////////// falsche Schiffslängen//////////////
+	@Test(excpected = falscheSChiffslaengeException)
+	public void testsetShip019() throws InvalideEingabeException, InvalideLaengenEingabeException {
+		SchiffeVersenken sv = new SchiffeVersenkenImpl();
+		sv.setShip(1, 1, Ship.BATTLESHIP, 2, true);
+
+	}
+	@Test(excpected = falscheSChiffslaengeException)
+	public void testsetShip020() throws InvalideEingabeException, InvalideLaengenEingabeException {
+		SchiffeVersenken sv = new SchiffeVersenkenImpl();
+		sv.setShip(1, 1, Ship.CRUISER, 5, true);
+
+	}
+	@Test(excpected = falscheSChiffslaengeException)
+	public void testsetShip021() throws InvalideEingabeException, InvalideLaengenEingabeException {
+		SchiffeVersenken sv = new SchiffeVersenkenImpl();
+		sv.setShip(1, 1, Ship.SUBMARINE, 3, true);
 
 	}
 
