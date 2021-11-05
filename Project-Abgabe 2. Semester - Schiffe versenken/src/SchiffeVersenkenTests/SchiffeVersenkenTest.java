@@ -16,6 +16,7 @@ import org.junit.Test;
 
 /*immer mindestens 5 oberer und unterer Rand testen (wenn nötig)
  * TESTS:
+ * Test ist angekommen !
  * 	------------Test setShip----------
  * ==valide Koordinaten
  * ==invalide koordinateneingaben  <1 und >10
