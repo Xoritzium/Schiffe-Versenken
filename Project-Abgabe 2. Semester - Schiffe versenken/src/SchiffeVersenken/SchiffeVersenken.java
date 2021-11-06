@@ -25,10 +25,6 @@ package SchiffeVersenken;
  * //////////////////////// Vorlesung 1,11,21
  * //////////////////////////////////// Tests: Reihenfolge, Spielseite, Gewinner
  * abfragen testen, siehe tic tac toe schön nach junit richten !
- * 
- * 
- * 
- *
  */
 
 public interface SchiffeVersenken {

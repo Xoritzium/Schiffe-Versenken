@@ -211,16 +211,41 @@ public class SchiffeVersenkenTest {
 		sv.setShip(1, 1, Ship.BATTLESHIP, 2, true);
 
 	}
+
 	@Test(excpected = falscheSChiffslaengeException)
 	public void testsetShip020() throws InvalideEingabeException, InvalideLaengenEingabeException {
 		SchiffeVersenken sv = new SchiffeVersenkenImpl();
 		sv.setShip(1, 1, Ship.CRUISER, 5, true);
 
 	}
+
 	@Test(excpected = falscheSChiffslaengeException)
 	public void testsetShip021() throws InvalideEingabeException, InvalideLaengenEingabeException {
 		SchiffeVersenken sv = new SchiffeVersenkenImpl();
 		sv.setShip(1, 1, Ship.SUBMARINE, 3, true);
+
+	}
+
+	///////////////// Schiffe überlappen sich/////////////
+	@Test(excpected = SchiffSetFeldBelegtException)
+	public void testsetShip022() throws InvalideEingabeException, InvalideLaengenEingabeException {
+		SchiffeVersenken sv = new SchiffeVersenkenImpl();
+		sv.setShip(1, 1, Ship.SUBMARINE, 2, true);
+		sv.setShip(1, 2, Ship.CRUISER, 3, false);
+
+	}
+	@Test(excpected = SchiffSetFeldBelegtException)
+	public void testsetShip023() throws InvalideEingabeException, InvalideLaengenEingabeException {
+		SchiffeVersenken sv = new SchiffeVersenkenImpl();
+		sv.setShip(4, 4, Ship.BATTLESHIP, 5, true);
+		sv.setShip(4, 4, Ship.DESTROYER, 3, false);
+
+	}
+	@Test(excpected = SchiffSetFeldBelegtException)
+	public void testsetShip024() throws InvalideEingabeException, InvalideLaengenEingabeException {
+		SchiffeVersenken sv = new SchiffeVersenkenImpl();
+		sv.setShip(5, 3, Ship.SUBMARINE, 2, true);
+		sv.setShip(6, 2, Ship.CRUISER, 4, false);
 
 	}
 
