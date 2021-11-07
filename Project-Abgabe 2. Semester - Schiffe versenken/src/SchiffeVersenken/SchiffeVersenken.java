@@ -56,6 +56,7 @@ public interface SchiffeVersenken {
 	 * @param x Zahl, auf die geschossen wird
 	 * @param y Zahl auf den geschosssen wird
 	 */
-	int[] shot(int x, int y);
+	Shot shot(int x, int y);
+
 
 }
