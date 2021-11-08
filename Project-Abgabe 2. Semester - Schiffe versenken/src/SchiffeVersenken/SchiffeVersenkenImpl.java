@@ -1,20 +1,18 @@
 package SchiffeVersenken;
 
-
-
 public class SchiffeVersenkenImpl implements SchiffeVersenken {
 // braucht man das Enum ship ?
-	
 
-	
 	/**
-	 * die Beiden Spielernamen, Wichtig für die Überkreuzgeschichte 
+	 * die Beiden Spielernamen, Wichtig für die Überkreuzgeschichte
+	 * 
 	 * @param p1 == Player One
 	 * @param p2 == Player Two
 	 */
 	public SchiffeVersenkenImpl(String p1, String p2) {
 		// TODO Auto-generated constructor stub
 	}
+
 	/**
 	 * allgemeiner Constructor
 	 */
@@ -22,12 +20,14 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 		// TODO Auto-generated constructor stub
 	}
 
-	public oneShip setShip(int x, int y, Ship ship, int length, boolean dir) throws InvalideEingabeException, InvalideLaengenEingabeException {
-		
+	public oneShip setShip(int x, int y, Ship ship, int length, boolean dir)
+			throws InvalideEingabeException, invalideLaengenEingabeException,  SchiffSetFeldBelegtException,
+			zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
+
 		// Validierung der Eingaben
 		validCoord(x);
 		validCoord(y);
-		validLength(length);
+		validLength(length, ship);
 
 		int[] coords = { x, y };
 
@@ -37,18 +37,19 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 		return actualship;
 
 	}
-/**
- * generiert einen Schuss
- */
+
+	/**
+	 * generiert einen Schuss
+	 */
 	public Shot shot(int x, int y) {
-		return new Shot(x,y);
+		return new Shot(x, y);
 
 	}
 
 ///////////////////// Hilfsmethoden////////////////////
-	
+
 	//////////////// Validierungsmethoden /////////
-	
+
 	/**
 	 * Überprüft, ob die Eingabe innerhalb der gegebenen Parameter liegt
 	 * 
@@ -65,17 +66,25 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 	 * Überprüft die Länge des Schiffes ein Schiff kann zwischen 2 und 5 Lang sein
 	 * 
 	 * @param l Länge des Schiffs
-	 * @throws invalide Länge
+	 * @Throw throws invalide Länge
 	 */
-	private void validLength(int l) throws InvalideLaengenEingabeException {
-		if (l < 2 || l > 5) {
-			throw new InvalideLaengenEingabeException();
+	private void validLength(int l, Ship ship) throws invalideLaengenEingabeException {
+		switch (l) {
+		case 2:
+			if (ship != Ship.SUBMARINE)
+				throw new invalideLaengenEingabeException();
+		case 3:
+			if (ship != Ship.DESTROYER)
+				throw new invalideLaengenEingabeException();
+		case 4:
+			if (ship != Ship.CRUISER)
+				throw new invalideLaengenEingabeException();
+		case 5:
+			if (ship != Ship.BATTLESHIP)
+				throw new invalideLaengenEingabeException();
+
 		}
 
 	}
-
-
-
-
 
 }
