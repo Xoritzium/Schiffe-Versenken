@@ -57,8 +57,8 @@ public interface SchiffeVersenken {
 	 * Schieﬂt auf eine bestimmte Stelle die ein Spieler gew‰hlt hat.
 	 * 
 	 * @param x Zahl, auf die geschossen wird
-	 * @param y Zahl auf den geschosssen wird
+	 * @param y Zahl auf die geschosssen wird
 	 */
-	Shot shot(int x, int y);
+	Shot shot(int x, int y)throws InvalideEingabeException;
 
 }

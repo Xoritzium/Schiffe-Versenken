@@ -1,15 +1,14 @@
 package SchiffeVersenkenTests;
 
 import SchiffeVersenken.InvalideEingabeException;
-import SchiffeVersenken.InvalideLaengenEingabeException;
 import SchiffeVersenken.InvalideRichtungException;
 import SchiffeVersenken.InvalideSchiffSetPositionExecption;
+import SchiffeVersenken.invalideLaengenEingabeException;
 import SchiffeVersenken.SchiffSetFeldBelegtException;
 import SchiffeVersenken.SchiffeVersenken;
 import SchiffeVersenken.SchiffeVersenkenImpl;
 import SchiffeVersenken.Ship;
 import SchiffeVersenken.Shot;
-import SchiffeVersenken.invalideLaengenEingabeException;
 import SchiffeVersenken.oneShip;
 import SchiffeVersenken.zuVieleSchiffeException;
 import junit.framework.Assert;
@@ -41,7 +40,6 @@ import org.junit.Test;
  */
 public class SchiffeVersenkenTest {
 //////////////// valide Koordinateneingaben//////////kannn man theoretisch zusammenfasse, sodass ein Test mehrere Asserts hat
-	// Fragen: ist z37 klug ?, ein classobjekt von Schiffe versenken machen? anstatt
 
 	/**
 	 * 
@@ -51,6 +49,8 @@ public class SchiffeVersenkenTest {
 		SchiffeVersenken sv = new SchiffeVersenkenImpl();
 		return sv;
 	}
+
+
 
 	@Test
 	public void testsetShip001()
@@ -79,7 +79,8 @@ public class SchiffeVersenkenTest {
 	@Test
 	public void testsetShip003()
 			throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
-			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {		SchiffeVersenken sv = schiffeVersenkenImpl();
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
+		SchiffeVersenken sv = schiffeVersenkenImpl();
 		oneShip ship = sv.setShip(5, 6, Ship.CRUISER, 4, false);
 		int[] tester = { ship.getCoordX(), ship.getCoordY() };
 		int[] pruefer = { 5, 6 };
@@ -90,7 +91,8 @@ public class SchiffeVersenkenTest {
 	@Test
 	public void testsetShip004()
 			throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
-			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {		SchiffeVersenken sv = schiffeVersenkenImpl();
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
+		SchiffeVersenken sv = schiffeVersenkenImpl();
 		oneShip ship = sv.setShip(10, 10, Ship.CRUISER, 4, false);
 		int[] tester = { ship.getCoordX(), ship.getCoordY() };
 		int[] pruefer = { 10, 10 };
@@ -101,7 +103,8 @@ public class SchiffeVersenkenTest {
 	@Test
 	public void testsetShip005()
 			throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
-			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {		SchiffeVersenken sv = schiffeVersenkenImpl();
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
+		SchiffeVersenken sv = schiffeVersenkenImpl();
 		oneShip ship = sv.setShip(5, 10, Ship.CRUISER, 4, false);
 		int[] tester = { ship.getCoordX(), ship.getCoordY() };
 		int[] pruefer = { 5, 10 };
@@ -114,16 +117,36 @@ public class SchiffeVersenkenTest {
 	@Test(expected = InvalideEingabeException.class)
 	public void testsetShip006()
 			throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
-			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {		SchiffeVersenken sv = schiffeVersenkenImpl();
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
+		SchiffeVersenken sv = schiffeVersenkenImpl();
 		sv.setShip(11, 8, Ship.CRUISER, 4, false);
+
+	}
+
+	@Test(expected = InvalideEingabeException.class)
+	public void testsetShip006b()
+			throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
+		SchiffeVersenken sv = schiffeVersenkenImpl();
+		sv.setShip(0, 8, Ship.CRUISER, 4, false);
 
 	}
 
 	@Test(expected = InvalideEingabeException.class)
 	public void testsetShip007()
 			throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
-			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {		SchiffeVersenken sv = schiffeVersenkenImpl();
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
+		SchiffeVersenken sv = schiffeVersenkenImpl();
 		sv.setShip(2, 12, Ship.CRUISER, 4, false);
+
+	}
+
+	@Test(expected = InvalideEingabeException.class)
+	public void testsetShip007b()
+			throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
+		SchiffeVersenken sv = schiffeVersenkenImpl();
+		sv.setShip(2, 0, Ship.CRUISER, 4, false);
 
 	}
 
@@ -131,7 +154,8 @@ public class SchiffeVersenkenTest {
 	@Test(expected = invalideLaengenEingabeException.class)
 	public void testsetShip008()
 			throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
-			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {		SchiffeVersenken sv = schiffeVersenkenImpl();
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
+		SchiffeVersenken sv = schiffeVersenkenImpl();
 		sv.setShip(5, 10, Ship.CRUISER, 6, false);
 
 	}
@@ -139,7 +163,8 @@ public class SchiffeVersenkenTest {
 	@Test(expected = invalideLaengenEingabeException.class)
 	public void testsetShip009()
 			throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
-			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {		SchiffeVersenken sv = schiffeVersenkenImpl();
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
+		SchiffeVersenken sv = schiffeVersenkenImpl();
 		sv.setShip(5, 10, Ship.CRUISER, 0, false);
 
 	}
@@ -148,14 +173,16 @@ public class SchiffeVersenkenTest {
 	@Test(expected = InvalideSchiffSetPositionExecption.class)
 	public void testsetShip010()
 			throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
-			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {		SchiffeVersenken sv = schiffeVersenkenImpl();
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
+		SchiffeVersenken sv = schiffeVersenkenImpl();
 		sv.setShip(10, 1, Ship.SUBMARINE, 2, false);
 	}
 
 	@Test(expected = InvalideSchiffSetPositionExecption.class)
 	public void testsetShip011()
 			throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
-			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {		SchiffeVersenken sv = schiffeVersenkenImpl();
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
+		SchiffeVersenken sv = schiffeVersenkenImpl();
 		sv.setShip(10, 10, Ship.SUBMARINE, 2, false);
 
 	}
@@ -173,7 +200,8 @@ public class SchiffeVersenkenTest {
 	@Test(expected = InvalideSchiffSetPositionExecption.class)
 	public void testsetShip012()
 			throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
-			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {		SchiffeVersenken sv = schiffeVersenkenImpl();
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
+		SchiffeVersenken sv = schiffeVersenkenImpl();
 		sv.setShip(1, 10, Ship.SUBMARINE, 2, true);
 
 	}
@@ -181,23 +209,26 @@ public class SchiffeVersenkenTest {
 	@Test(expected = InvalideSchiffSetPositionExecption.class)
 	public void testsetShip013()
 			throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
-			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {		SchiffeVersenken sv = schiffeVersenkenImpl();
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
+		SchiffeVersenken sv = schiffeVersenkenImpl();
 		sv.setShip(10, 10, Ship.SUBMARINE, 2, true);
 
 	}
 
-	@Test(expected = InvalideSchiffSetPositionExecption,class)
+	@Test(expected = InvalideSchiffSetPositionExecption.class)
 	public void testsetShip015()
 			throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
-			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {		SchiffeVersenken sv = schiffeVersenkenImpl();
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
+		SchiffeVersenken sv = schiffeVersenkenImpl();
 		sv.setShip(5, 10, Ship.SUBMARINE, 2, false);
 
 	}
 //////////////////Anzahl der Schiffe übersschritten///////////////
 
 	@Test(expected = zuVieleSchiffeException.class)
-	public void testsetShip016() 	throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
-	SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption  {
+	public void testsetShip016()
+			throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
 		SchiffeVersenken sv = schiffeVersenkenImpl();
 		sv.setShip(1, 1, Ship.SUBMARINE, 2, true);
 		sv.setShip(2, 2, Ship.SUBMARINE, 2, true);
@@ -208,8 +239,9 @@ public class SchiffeVersenkenTest {
 	}
 
 	@Test(expected = zuVieleSchiffeException.class)
-	public void testsetShip017() 	throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
-	SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
+	public void testsetShip017()
+			throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
 		SchiffeVersenken sv = schiffeVersenkenImpl();
 		sv.setShip(1, 1, Ship.DESTROYER, 3, true);
 		sv.setShip(2, 2, Ship.DESTROYER, 3, true);
@@ -218,9 +250,10 @@ public class SchiffeVersenkenTest {
 
 	}
 
-	@Test(expected = invalideLaengenEingabeException.class)
-	public void testsetShip018() 	throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
-	SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
+	@Test(expected = zuVieleSchiffeException.class)
+	public void testsetShip018()
+			throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
 		SchiffeVersenken sv = schiffeVersenkenImpl();
 		sv.setShip(1, 1, Ship.BATTLESHIP, 5, true);
 		sv.setShip(2, 2, Ship.BATTLESHIP, 5, true); // zuviel
@@ -229,22 +262,25 @@ public class SchiffeVersenkenTest {
 
 	//////////////// falsche Schiffslängen//////////////
 	@Test(expected = invalideLaengenEingabeException.class)
-	public void testsetShip019() 	throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
-	SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {		SchiffeVersenken sv = schiffeVersenkenImpl();
+	public void testsetShip019()
+			throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
+		SchiffeVersenken sv = schiffeVersenkenImpl();
 		sv.setShip(1, 1, Ship.BATTLESHIP, 2, true);
 
 	}
 
 	@Test(expected = invalideLaengenEingabeException.class)
-	public void testsetShip020() throws InvalideEingabeException, invalideLaengenEingabeException {
+	public void testsetShip020() throws InvalideEingabeException, invalideLaengenEingabeException,
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
 		SchiffeVersenken sv = schiffeVersenkenImpl();
 		sv.setShip(1, 1, Ship.CRUISER, 5, true);
 
 	}
 
 	@Test(expected = invalideLaengenEingabeException.class)
-	public void testsetShip021()
-			throws InvalideEingabeException, invalideLaengenEingabeException, SchiffSetFeldBelegtException {
+	public void testsetShip021() throws InvalideEingabeException, invalideLaengenEingabeException,
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
 		SchiffeVersenken sv = schiffeVersenkenImpl();
 		sv.setShip(1, 1, Ship.SUBMARINE, 3, true);
 
@@ -253,7 +289,8 @@ public class SchiffeVersenkenTest {
 	///////////////// Schiffe überlappen sich/////////////
 
 	@Test(expected = SchiffSetFeldBelegtException.class)
-	public void testsetShip022() throws InvalideEingabeException, invalideLaengenEingabeException {
+	public void testsetShip022() throws InvalideEingabeException, invalideLaengenEingabeException,
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
 		SchiffeVersenken sv = schiffeVersenkenImpl();
 		sv.setShip(1, 1, Ship.SUBMARINE, 2, true);
 		sv.setShip(1, 2, Ship.CRUISER, 3, false);
@@ -261,7 +298,8 @@ public class SchiffeVersenkenTest {
 	}
 
 	@Test(expected = SchiffSetFeldBelegtException.class)
-	public void testsetShip023() throws InvalideEingabeException, invalideLaengenEingabeException {
+	public void testsetShip023() throws InvalideEingabeException, invalideLaengenEingabeException,
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
 		SchiffeVersenken sv = schiffeVersenkenImpl();
 		sv.setShip(4, 4, Ship.BATTLESHIP, 5, true);
 		sv.setShip(4, 4, Ship.DESTROYER, 3, false);
@@ -269,7 +307,8 @@ public class SchiffeVersenkenTest {
 	}
 
 	@Test(expected = SchiffSetFeldBelegtException.class)
-	public void testsetShip024() throws InvalideEingabeException, invalideLaengenEingabeException {
+	public void testsetShip024() throws InvalideEingabeException, invalideLaengenEingabeException,
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
 		SchiffeVersenken sv = schiffeVersenkenImpl();
 		sv.setShip(5, 3, Ship.SUBMARINE, 2, true);
 		sv.setShip(6, 2, Ship.CRUISER, 4, false);
@@ -280,7 +319,7 @@ public class SchiffeVersenkenTest {
 	}
 
 	@Test
-	public void testShot001() {
+	public void testShot001() throws InvalideEingabeException {
 		SchiffeVersenken shooter = schiffeVersenkenImpl();
 		// Schuss aus x = 1, y = 1
 		int[] tester = { shooter.shot(1, 1).getX(), shooter.shot(1, 1).getY() };
@@ -289,17 +328,16 @@ public class SchiffeVersenkenTest {
 	}
 
 	@Test
-	public void testShot002() {
+	public void testShot002() throws InvalideEingabeException {
 		SchiffeVersenken shooter = schiffeVersenkenImpl();
 		// Schuss aus x = 10, y = 10
-		int x = shooter.shot(1, 1).getX();
 		int[] tester = { shooter.shot(10, 10).getX(), shooter.shot(10, 10).getY() };
 		int[] pruefer = { 10, 10 };
 		assertArrayEquals(pruefer, tester);
 	}
 
 	@Test
-	public void testShot003() {
+	public void testShot003() throws InvalideEingabeException {
 		SchiffeVersenken shooter = schiffeVersenkenImpl();
 		// Schuss auf x = 3, y = 6
 		int[] tester = { shooter.shot(3, 6).getX(), shooter.shot(3, 6).getY() };
@@ -308,14 +346,14 @@ public class SchiffeVersenkenTest {
 	}
 
 	@Test(expected = InvalideEingabeException.class)
-	public void testShot004() {
+	public void testShot004() throws InvalideEingabeException {
 		SchiffeVersenken shooter = schiffeVersenkenImpl();
 		shooter.shot(3, 11);
 
 	}
 
 	@Test(expected = InvalideEingabeException.class)
-	public void testShot005() {
+	public void testShot005() throws InvalideEingabeException {
 		SchiffeVersenken shooter = schiffeVersenkenImpl();
 		shooter.shot(0, 6);
 
@@ -323,7 +361,8 @@ public class SchiffeVersenkenTest {
 
 //////// Treffer, irgendwas das True/false ausgibt
 	@Test
-	public void testShot006() throws InvalideEingabeException, invalideLaengenEingabeException {
+	public void testShot006() throws InvalideEingabeException, invalideLaengenEingabeException,
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
 		SchiffeVersenken shooter = schiffeVersenkenImpl();
 		shooter.setShip(3, 3, Ship.DESTROYER, 3, true);
 		Assert.assertTrue(shooter.shot(3, 5).getTreffer());
@@ -331,7 +370,8 @@ public class SchiffeVersenkenTest {
 	}
 
 	@Test
-	public void testShot007() throws InvalideEingabeException, invalideLaengenEingabeException {
+	public void testShot007() throws InvalideEingabeException, invalideLaengenEingabeException,
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
 		SchiffeVersenken shooter = schiffeVersenkenImpl();
 		shooter.setShip(3, 3, Ship.DESTROYER, 3, true);
 		Assert.assertTrue(shooter.shot(3, 3).getTreffer());
@@ -339,7 +379,8 @@ public class SchiffeVersenkenTest {
 	}
 
 	@Test
-	public void testShot008() throws InvalideEingabeException, invalideLaengenEingabeException {
+	public void testShot008() throws InvalideEingabeException, invalideLaengenEingabeException,
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
 		SchiffeVersenken shooter = schiffeVersenkenImpl();
 		shooter.setShip(10, 3, Ship.DESTROYER, 3, true);
 		Assert.assertFalse(shooter.shot(1, 4).getTreffer());
@@ -347,7 +388,8 @@ public class SchiffeVersenkenTest {
 	}
 
 	@Test
-	public void testShot009() throws InvalideEingabeException, invalideLaengenEingabeException {
+	public void testShot009() throws InvalideEingabeException, invalideLaengenEingabeException,
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
 		SchiffeVersenken shooter = schiffeVersenkenImpl();
 		shooter.setShip(3, 3, Ship.DESTROYER, 3, true);
 		shooter.shot(4, 5);
@@ -356,7 +398,8 @@ public class SchiffeVersenkenTest {
 	}
 
 	@Test
-	public void testShot010() throws InvalideEingabeException, invalideLaengenEingabeException {
+	public void testShot010() throws InvalideEingabeException, invalideLaengenEingabeException,
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
 		SchiffeVersenken shooter = schiffeVersenkenImpl();
 		shooter.setShip(3, 3, Ship.DESTROYER, 3, true);
 		shooter.shot(3, 4);
@@ -366,7 +409,8 @@ public class SchiffeVersenkenTest {
 	}
 
 	@Test
-	public void testShot011() throws InvalideEingabeException, invalideLaengenEingabeException {
+	public void testShot011() throws InvalideEingabeException, invalideLaengenEingabeException,
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
 		SchiffeVersenken shooter = schiffeVersenkenImpl();
 		shooter.setShip(3, 3, Ship.DESTROYER, 3, true);
 		Assert.assertFalse(shooter.shot(3, 3).getWon());
@@ -376,28 +420,25 @@ public class SchiffeVersenkenTest {
 	// Kein Treffer == anderer Spieler ist drana
 
 	@Test
-	public void testShot12() throws InvalideEingabeException, invalideLaengenEingabeException {
+	public void testShot12() throws InvalideEingabeException, invalideLaengenEingabeException,
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
 		SchiffeVersenken shooter = schiffeVersenkenImpl();
 		shooter.setShip(4, 8, Ship.SUBMARINE, 2, false);
 		Assert.assertTrue(shooter.shot(2, 2).getNextPlayer());
 		Assert.assertFalse(shooter.shot(5, 8).getNextPlayer());
 
 	}
-
+	/////////////////////////////////////////////////////
 	//////////////// allgemeine Tests ///////////////////
-	@Test
-	public void testGenerale01() {
-		SchiffeVersenken tg = new SchiffeVersenkenImpl("Spanien", "Atzteken");
-		Assert.assertNotNull(tg);
-	}
+	////////////////////////////////////////////////////
 
-	@Test(expected = nameTakenException.class)
-	public void testGenerale02() {
-		SchiffeVersenken tg = new SchiffeVersenkenImpl("Spanien", "Spanien");
-	}
-
+	/*
+	 * @Test(expected = nameTakenException.class) public void testGenerale02() {
+	 * SchiffeVersenken tg = new SchiffeVersenkenImpl("Spanien", "Spanien"); }
+	 */
 	@Test
-	public void runTest01() throws InvalideEingabeException, invalideLaengenEingabeException {
+	public void runTest01() throws InvalideEingabeException, invalideLaengenEingabeException,
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
 		SchiffeVersenken tg = schiffeVersenkenImpl();
 		tg.setShip(2, 2, Ship.SUBMARINE, 2, true);
 		tg.setShip(3, 2, Ship.SUBMARINE, 2, false);
@@ -414,6 +455,5 @@ public class SchiffeVersenkenTest {
 		Assert.assertTrue(tg.shot(8, 9).getTreffer()); // Treffer
 		Assert.assertTrue(tg.shot(8, 9).getWon()); // Treffer und gewonnen
 	}
-	
 
 }

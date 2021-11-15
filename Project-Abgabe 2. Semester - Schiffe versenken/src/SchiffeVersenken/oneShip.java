@@ -1,6 +1,8 @@
 package SchiffeVersenken;
 
 public class oneShip {
+	
+
 	// x und y Koordinaten
 	private int coordX;
 	private int coordY;
