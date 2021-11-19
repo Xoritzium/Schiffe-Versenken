@@ -11,11 +11,17 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 	private int countCruisers;
 	private int countBattleship;
 
-	// SPielfelder SpielerA und SpielerB
+	/*
+	 * SPielfelder SpielerA und SpielerB anpassen !!!!!!!!!!!!! momentan ist Field A
+	 * das einzige existente !!
+	 * Feld und Spielerverteilung gewährleisten, also Feld A und Feld B gewährleisten
+	 * neue Class, die zwei Felder hat und jeweils das andere beballert
+	 * 
+	 */
 	Field fieldA;
 	Field fieldB;
 
-	// braucht man das Enum ship ?
+	ConsoleView consoleView;
 
 	/**
 	 * allgemeiner Constructor
@@ -23,6 +29,7 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 	public SchiffeVersenkenImpl() {
 		fieldA = new Field();
 		fieldB = new Field();
+		consoleView = new ConsoleView();
 	}
 
 	public oneShip setShip(int x, int y, Ship ship, int length, boolean dir)
@@ -32,33 +39,42 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 		// Validierung der Eingaben
 		validCoord(x);
 		validCoord(y);
-		validLength(length, ship);
+		// validLength(ship, length); ===== siehe Methodenjavadoc
+		alternativeValidLength(ship, length);
+		// checkt aus dem Spielfeld herausragende Schiffe
 		validBorderPositions(x, y, length, dir);
-		enoughShips(ship);
+		// enoughShips(ship); == siehe Methodenjavadoc "validLEenght"
+		alternativeEnoughShips(ship);
 		checkTakenField(x, y, length, dir);
 
-		int[] coords = { x, y };
-
 		// generiert das gesamte Schiff
-		oneShip actualship = new oneShip(coords, ship, length, dir);
+		oneShip actualship = new oneShip(x, y, ship, length, dir);
 		// welches Feld wann ?
-		fieldA.updateFieldOnSet(x, y, length, dir);
-		
+
+		// fügt das Schiff dem Spielfeld hinzu
+		fieldA.updateFieldOnSet(actualship);
+		System.out.println("Setting a Ship");
+		consoleView.updateField(fieldA.getWholeField());
+
 		return actualship;
 
 	}
 
 	/**
 	 * generiert einen Schuss
-	 * @throws InvalideEingabeException 
+	 * 
+	 * @throws InvalideEingabeException
 	 */
 	public Shot shot(int x, int y) throws InvalideEingabeException {
-		Shot shot = new Shot(x,y);
+		Shot shot = new Shot(x, y);
 
 		validCoord(x);
 		validCoord(y);
 		shot.calculateHit(x, y, fieldA.getSingleField(x, y));
 		fieldA.updateFieldOnHit(shot);
+		shot.setWin(fieldA);
+		System.out.println("shot auf: x: " + x + "y: " + y);
+		consoleView.updateField(fieldA.getWholeField());
 		return shot;
 
 	}
@@ -82,26 +98,50 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 	/**
 	 * Überprüft die Länge des Schiffes ein Schiff kann zwischen 2 und 5 Lang sein
 	 * 
+	 * ======Warum, diese nicht geht und die mit den vier if-Statements, entzieht
+	 * sich meiner Kenntnis^^ selbes gilt für "enoughShips" -> liegts am Switch Case
+	 * ?
+	 * 
 	 * @param length Länge des Schiffs
 	 * @Throw throws invalide Länge als Exception
 	 */
-	private void validLength(int length, Ship ship) throws invalideLaengenEingabeException {
-		switch (ship) {
-		case SUBMARINE:
-			if (length != 2)
+	private void validLength(Ship ship, int length) throws invalideLaengenEingabeException {
+		switch (length) {
+		case 2:
+			if (ship != Ship.SUBMARINE) {
 				throw new invalideLaengenEingabeException();
-		case DESTROYER:
-			if (length != 3)
+			}
+			break;
+		case 3:
+			if (ship != Ship.DESTROYER) {
 				throw new invalideLaengenEingabeException();
-		case CRUISER:
-			if (length != 4)
+			}
+		case 4:
+			if (ship != Ship.CRUISER) {
 				throw new invalideLaengenEingabeException();
-		case BATTLESHIP:
-			if (length != 5)
+			}
+			break;
+		case 5:
+			if (ship != Ship.BATTLESHIP) {
 				throw new invalideLaengenEingabeException();
-
+			}
+		default:
+			throw new invalideLaengenEingabeException();
 		}
+	}
 
+	/**
+	 * alternative
+	 * 
+	 * @param ship
+	 * @param length
+	 * @throws invalideLaengenEingabeException
+	 */
+	private void alternativeValidLength(Ship ship, int length) throws invalideLaengenEingabeException {
+		if (ship == Ship.BATTLESHIP && length != 5 || ship == Ship.CRUISER && length != 4
+				|| ship == Ship.DESTROYER && length != 3 || ship == Ship.SUBMARINE && length != 2) {
+			throw new invalideLaengenEingabeException();
+		}
 	}
 
 	/**
@@ -158,19 +198,53 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 		}
 	}
 
+	private void alternativeEnoughShips(Ship ship) throws zuVieleSchiffeException {
+		if (ship == Ship.BATTLESHIP) {
+			countBattleship++;
+			if (countBattleship > NUM_OF_BATTLESHIPS) {
+				throw new zuVieleSchiffeException();
+			}
+		} else if (ship == Ship.CRUISER) {
+			countCruisers++;
+			if (countCruisers > NUM_OF_CRUISERS) {
+				throw new zuVieleSchiffeException();
+			}
+		} else if (ship == Ship.DESTROYER) {
+			countDestroyers++;
+			if (countDestroyers > NUM_OF_DESTROYERS) {
+				throw new zuVieleSchiffeException();
+			}
+		} else if (ship == Ship.SUBMARINE) {
+			countSubmarines++;
+			if (countSubmarines > NUM_OF_SUBMARINES) {
+				throw new zuVieleSchiffeException();
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 * @param shiplength
+	 * @param direction
+	 * @throws SchiffSetFeldBelegtException
+	 */
+
 	private void checkTakenField(int x, int y, int shiplength, boolean direction) throws SchiffSetFeldBelegtException {
 		if (direction == false) {
-			for (int i = x; i < shiplength; i++) {
+			for (int i = x; i < x + shiplength; i++) {
 				if (fieldA.getSingleField(i, y) == true) {
 					throw new SchiffSetFeldBelegtException();
 				}
 			}
 		} else {
-			for (int i = y; i < shiplength; i++) {
+			for (int i = y; i < y + shiplength; i++) {
 				if (fieldA.getSingleField(x, i) == true) {
 					throw new SchiffSetFeldBelegtException();
 				}
 			}
 		}
 	}
+
 }

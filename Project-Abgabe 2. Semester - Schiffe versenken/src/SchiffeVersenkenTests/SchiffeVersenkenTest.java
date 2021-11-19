@@ -93,9 +93,9 @@ public class SchiffeVersenkenTest {
 			throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
 			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
 		SchiffeVersenken sv = schiffeVersenkenImpl();
-		oneShip ship = sv.setShip(10, 10, Ship.CRUISER, 4, false);
+		oneShip ship = sv.setShip(3, 4, Ship.CRUISER, 4, false);
 		int[] tester = { ship.getCoordX(), ship.getCoordY() };
-		int[] pruefer = { 10, 10 };
+		int[] pruefer = { 3, 4 };
 		assertArrayEquals(pruefer, tester);
 
 	}
@@ -156,7 +156,7 @@ public class SchiffeVersenkenTest {
 			throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
 			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
 		SchiffeVersenken sv = schiffeVersenkenImpl();
-		sv.setShip(5, 10, Ship.CRUISER, 6, false);
+		sv.setShip(5, 10, Ship.CRUISER, 3, false);
 
 	}
 
@@ -220,7 +220,7 @@ public class SchiffeVersenkenTest {
 			throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
 			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
 		SchiffeVersenken sv = schiffeVersenkenImpl();
-		sv.setShip(5, 10, Ship.SUBMARINE, 2, false);
+		sv.setShip(5, 10, Ship.SUBMARINE, 2, true);
 
 	}
 //////////////////Anzahl der Schiffe übersschritten///////////////
@@ -293,7 +293,7 @@ public class SchiffeVersenkenTest {
 			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
 		SchiffeVersenken sv = schiffeVersenkenImpl();
 		sv.setShip(1, 1, Ship.SUBMARINE, 2, true);
-		sv.setShip(1, 2, Ship.CRUISER, 3, false);
+		sv.setShip(1, 2, Ship.CRUISER, 4, false);
 
 	}
 
@@ -311,7 +311,7 @@ public class SchiffeVersenkenTest {
 			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
 		SchiffeVersenken sv = schiffeVersenkenImpl();
 		sv.setShip(5, 3, Ship.SUBMARINE, 2, true);
-		sv.setShip(6, 2, Ship.CRUISER, 4, false);
+		sv.setShip(2, 4, Ship.CRUISER, 4, false);
 
 		///////////////////////////////////////////
 		/////////// Tests für "shot"///////////////
@@ -424,8 +424,11 @@ public class SchiffeVersenkenTest {
 			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
 		SchiffeVersenken shooter = schiffeVersenkenImpl();
 		shooter.setShip(4, 8, Ship.SUBMARINE, 2, false);
+		//erwarte true, nächster Spieler ist dran
 		Assert.assertTrue(shooter.shot(2, 2).getNextPlayer());
-		Assert.assertFalse(shooter.shot(5, 8).getNextPlayer());
+		
+		Assert.assertFalse(shooter.shot(4,8).getNextPlayer());
+	
 
 	}
 	/////////////////////////////////////////////////////
@@ -447,7 +450,7 @@ public class SchiffeVersenkenTest {
 		Assert.assertTrue(tg.shot(2, 3).getTreffer()); // Treffer
 		Assert.assertFalse(tg.shot(2, 1).getTreffer()); // kein Treffer
 		Assert.assertTrue(tg.shot(3, 2).getTreffer()); // Treffer
-		Assert.assertTrue(tg.shot(3, 4).getTreffer()); // Treffer
+		Assert.assertTrue(tg.shot(4, 2).getTreffer()); // Treffer
 		Assert.assertTrue(tg.shot(8, 6).getTreffer()); // Treffer
 		Assert.assertTrue(tg.shot(8, 7).getTreffer()); // Treffer
 		Assert.assertTrue(tg.shot(8, 8).getTreffer()); // Treffer

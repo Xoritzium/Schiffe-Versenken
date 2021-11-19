@@ -16,16 +16,17 @@ public class Field {
 
 	/**
 	 * jedes Mal, wenn ein neues Schiff gesetzt wird, wird das Feld aktualisiert
+	 * 
 	 */
-	public void updateFieldOnSet(int x, int y, int shiplength, boolean direction) {
-		int trueX = x - 1;
-		int trueY = y - 1;
-		if (direction == false) {
-			for (int i = trueX; i < shiplength; i++) {
+	public void updateFieldOnSet(oneShip ship) {
+		int trueX = ship.getCoordX() - 1;
+		int trueY = ship.getCoordY() - 1;
+		if (ship.getDirection() == false) {
+			for (int i = trueX; i < trueX + ship.getLength(); i++) {
 				field[i][trueY] = true;
 			}
 		} else {
-			for (int i = trueY; i < shiplength; i++) {
+			for (int i = trueY; i < trueY + ship.getLength(); i++) {
 				field[trueX][i] = true;
 			}
 
@@ -68,5 +69,8 @@ public class Field {
 
 	public int getFieldLength() {
 		return field.length;
+	}
+	public boolean[][] getWholeField(){
+		return field;
 	}
 }

@@ -14,9 +14,9 @@ public class oneShip {
 	// Schiffsausrichtung
 	private boolean direction;
 
-	public oneShip(int[] coords, Ship s, int length, boolean dir) {
-		coordX = coords[0];
-		coordY = coords[1];
+	public oneShip(int x, int y, Ship s, int length, boolean dir) {
+		coordX = x;
+		coordY = y;
 		ship = s;
 		this.length = length;
 		direction = dir;

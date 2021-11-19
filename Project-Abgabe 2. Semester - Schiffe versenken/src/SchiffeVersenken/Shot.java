@@ -29,19 +29,18 @@ public class Shot {
 		}
 		return treffer = false;
 	}
-	/**
-	 *  gibt solange false zurück, solange noch Schiffsreste auf dem Feld liegen
 
+	/**
+	 * gibt solange false zurück, solange noch Schiffsreste auf dem Feld liegen
+	 * 
 	 * @param field
 	 * @return
 	 */
-	
-	/*
-	private boolean setWin(Field field) {
-		for (int i = 0; i < field.getFieldLength(); i++) {
-			for (int j = 0; j < field.getFieldLength(); j++) {
+	public boolean setWin(Field field) {
+		for (int i = 1; i < field.getFieldLength(); i++) {
+			for (int j = 1; j < field.getFieldLength(); j++) {
 				if (field.getSingleField(i, j) == true) {
-					return won =false;
+					return won = false;
 				}
 
 			}
@@ -49,17 +48,17 @@ public class Shot {
 		}
 		return won = true;
 	}
-*/
-	
-	
+
 	/**
 	 * returned true, wenn der nächste Spieler dran ist, also nicht getroffen hat
 	 * returned false, wenn man getroffen hat und nochmal dran ist
 	 * 
-	 * @return
+	 * @return siehe Methodenbeschreibung
 	 */
 	public boolean getNextPlayer() {
-		// TODO Auto-generated method stub
+		if (getTreffer() == false) {
+			return true;
+		}
 		return false;
 	}
 
@@ -79,9 +78,9 @@ public class Shot {
 	public boolean getWon() {
 		return won;
 	}
-////Setter
-	public void setWon(boolean won) {
-		this.won = won;
+
+/////////////Setter
+	public void setWon(boolean b) {
+		won = b;
 	}
-	
 }
