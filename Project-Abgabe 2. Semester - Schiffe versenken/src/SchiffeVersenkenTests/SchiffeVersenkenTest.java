@@ -405,6 +405,7 @@ public class SchiffeVersenkenTest {
 		shooter.shot(3, 4);
 		shooter.shot(3, 5);
 		shooter.shot(3, 3);
+		String s = " hallo".trim();
 		Assert.assertTrue(shooter.shot(3, 3).getWon());
 	}
 

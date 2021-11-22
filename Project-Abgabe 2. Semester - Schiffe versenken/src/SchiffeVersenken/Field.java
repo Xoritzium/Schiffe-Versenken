@@ -2,7 +2,9 @@ package SchiffeVersenken;
 
 public class Field {
 	/*
-	 * x*y true: da ist ein Schiff false: freier Platz,
+	 * x*y 
+	 * true: da ist ein Schiff 
+	 * false: freier Platz,
 	 */
 	private boolean[][] field = new boolean[10][10];
 

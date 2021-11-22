@@ -13,9 +13,9 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 
 	/*
 	 * SPielfelder SpielerA und SpielerB anpassen !!!!!!!!!!!!! momentan ist Field A
-	 * das einzige existente !!
-	 * Feld und Spielerverteilung gewährleisten, also Feld A und Feld B gewährleisten
-	 * neue Class, die zwei Felder hat und jeweils das andere beballert
+	 * das einzige existente !! Feld und Spielerverteilung gewährleisten, also Feld
+	 * A und Feld B gewährleisten neue Class, die zwei Felder hat und jeweils das
+	 * andere beballert
 	 * 
 	 */
 	Field fieldA;
@@ -39,12 +39,12 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 		// Validierung der Eingaben
 		validCoord(x);
 		validCoord(y);
-		// validLength(ship, length); ===== siehe Methodenjavadoc
-		alternativeValidLength(ship, length);
+		validLength(ship, length);// ===== siehe Methodenjavadoc
+		// alternativeValidLength(ship, length);
 		// checkt aus dem Spielfeld herausragende Schiffe
 		validBorderPositions(x, y, length, dir);
-		// enoughShips(ship); == siehe Methodenjavadoc "validLEenght"
-		alternativeEnoughShips(ship);
+		enoughShips(ship);// == siehe Methodenjavadoc "validLEenght"
+		// alternativeEnoughShips(ship);
 		checkTakenField(x, y, length, dir);
 
 		// generiert das gesamte Schiff
@@ -116,6 +116,7 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 			if (ship != Ship.DESTROYER) {
 				throw new invalideLaengenEingabeException();
 			}
+			break;
 		case 4:
 			if (ship != Ship.CRUISER) {
 				throw new invalideLaengenEingabeException();
@@ -125,8 +126,10 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 			if (ship != Ship.BATTLESHIP) {
 				throw new invalideLaengenEingabeException();
 			}
+			break;
 		default:
 			throw new invalideLaengenEingabeException();
+
 		}
 	}
 
@@ -145,7 +148,7 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 	}
 
 	/**
-	 * überprüft, ob das SChiff am Rand irgendwo rausragt
+	 * überprüft, ob das Schiff am Rand irgendwo rausragt
 	 * 
 	 * @param x         X Koordinate
 	 * @param y         Y Koordinate
@@ -179,6 +182,7 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 			if (countSubmarines > NUM_OF_SUBMARINES) {
 				throw new zuVieleSchiffeException();
 			}
+			break;
 		case DESTROYER:
 			countDestroyers++;
 			if (countDestroyers > NUM_OF_DESTROYERS) {
@@ -189,11 +193,13 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 			if (countCruisers > NUM_OF_CRUISERS) {
 				throw new zuVieleSchiffeException();
 			}
+			break;
 		case BATTLESHIP:
 			countBattleship++;
 			if (countBattleship > NUM_OF_BATTLESHIPS) {
 				throw new zuVieleSchiffeException();
 			}
+			break;
 
 		}
 	}
