@@ -6,30 +6,23 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 	private final int NUM_OF_DESTROYERS = 3;
 	private final int NUM_OF_CRUISERS = 2;
 	private final int NUM_OF_BATTLESHIPS = 1;
+	private final int TOTAL_NUM_OF_Ships = NUM_OF_BATTLESHIPS + NUM_OF_CRUISERS + NUM_OF_DESTROYERS + NUM_OF_SUBMARINES; // insg:
+																															// 10
 	private int countSubmarines;
 	private int countDestroyers;
 	private int countCruisers;
 	private int countBattleship;
+	private int countNumOfShips;
 
-	/*
-	 * SPielfelder SpielerA und SpielerB anpassen !!!!!!!!!!!!! momentan ist Field A
-	 * das einzige existente !! Feld und Spielerverteilung gewährleisten, also Feld
-	 * A und Feld B gewährleisten neue Class, die zwei Felder hat und jeweils das
-	 * andere beballert
-	 * 
-	 */
-	Field fieldA;
-	Field fieldB;
-
-	ConsoleView consoleView;
+// Das Spielfeld. Es gibt insgesamt Zwei Objekte Schiffe Versenken, diese werden entsprechend angesteuert!
+	private Field theField;
 
 	/**
 	 * allgemeiner Constructor
 	 */
 	public SchiffeVersenkenImpl() {
-		fieldA = new Field();
-		fieldB = new Field();
-		consoleView = new ConsoleView();
+		theField = new Field();
+
 	}
 
 	public oneShip setShip(int x, int y, Ship ship, int length, boolean dir)
@@ -39,11 +32,11 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 		// Validierung der Eingaben
 		validCoord(x);
 		validCoord(y);
-		validLength(ship, length);// ===== siehe Methodenjavadoc
+		validLength(ship, length);
 		// alternativeValidLength(ship, length);
 		// checkt aus dem Spielfeld herausragende Schiffe
 		validBorderPositions(x, y, length, dir);
-		enoughShips(ship);// == siehe Methodenjavadoc "validLEenght"
+		enoughShips(ship);
 		// alternativeEnoughShips(ship);
 		checkTakenField(x, y, length, dir);
 
@@ -52,10 +45,9 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 		// welches Feld wann ?
 
 		// fügt das Schiff dem Spielfeld hinzu
-		fieldA.updateFieldOnSet(actualship);
-		System.out.println("Setting a Ship");
-		consoleView.updateField(fieldA.getWholeField());
-
+		theField.updateFieldOnSet(actualship);
+		// Debug Kram System.out.println("Setting a Ship");
+		System.out.println("SChiffe gesetzt: " +countNumOfShips);
 		return actualship;
 
 	}
@@ -70,11 +62,11 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 
 		validCoord(x);
 		validCoord(y);
-		shot.calculateHit(x, y, fieldA.getSingleField(x, y));
-		fieldA.updateFieldOnHit(shot);
-		shot.setWin(fieldA);
-		System.out.println("shot auf: x: " + x + "y: " + y);
-		consoleView.updateField(fieldA.getWholeField());
+		shot.calculateHit(x, y, theField.getSingleField(x, y));
+		theField.updateFieldOnHit(shot);
+		shot.setWin(theField);
+		// debug Kram System.out.println("shot auf: x: " + x + "y: " + y);
+
 		return shot;
 
 	}
@@ -179,24 +171,29 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 		switch (ship) {
 		case SUBMARINE:
 			countSubmarines++;
-			if (countSubmarines > NUM_OF_SUBMARINES) {
+			countNumOfShips++;
+			if (countSubmarines > NUM_OF_SUBMARINES || countNumOfShips > TOTAL_NUM_OF_Ships) {
 				throw new zuVieleSchiffeException();
 			}
 			break;
 		case DESTROYER:
 			countDestroyers++;
+			countNumOfShips++;
 			if (countDestroyers > NUM_OF_DESTROYERS) {
 				throw new zuVieleSchiffeException();
 			}
+			break;
 		case CRUISER:
 			countCruisers++;
-			if (countCruisers > NUM_OF_CRUISERS) {
+			countNumOfShips++;
+			if (countCruisers > NUM_OF_CRUISERS || countNumOfShips > TOTAL_NUM_OF_Ships) {
 				throw new zuVieleSchiffeException();
 			}
 			break;
 		case BATTLESHIP:
 			countBattleship++;
-			if (countBattleship > NUM_OF_BATTLESHIPS) {
+			countNumOfShips++;
+			if (countBattleship > NUM_OF_BATTLESHIPS || countNumOfShips > TOTAL_NUM_OF_Ships) {
 				throw new zuVieleSchiffeException();
 			}
 			break;
@@ -240,17 +237,34 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 	private void checkTakenField(int x, int y, int shiplength, boolean direction) throws SchiffSetFeldBelegtException {
 		if (direction == false) {
 			for (int i = x; i < x + shiplength; i++) {
-				if (fieldA.getSingleField(i, y) == true) {
+				if (theField.getSingleField(i, y) == true) {
 					throw new SchiffSetFeldBelegtException();
 				}
 			}
 		} else {
 			for (int i = y; i < y + shiplength; i++) {
-				if (fieldA.getSingleField(x, i) == true) {
+				if (theField.getSingleField(x, i) == true) {
 					throw new SchiffSetFeldBelegtException();
 				}
 			}
 		}
 	}
-
+////////////////////// Getter //////////////////////
+	public Field getField() {
+		return theField;
+	}
+	
+	
+	public int getCountOfShips() {
+		return countNumOfShips;
+	}
+	
+	
+	
+	public Field getTheField() {
+		return theField;
+	}
+	
+	
+	
 }

@@ -39,7 +39,8 @@ import org.junit.Test;
  * == testspiellauf, kleinere Anzahl Schiffe
  */
 public class SchiffeVersenkenTest {
-//////////////// valide Koordinateneingaben//////////kannn man theoretisch zusammenfasse, sodass ein Test mehrere Asserts hat
+//////////////// valide Koordinateneingaben////////
+	//kannn man theoretisch zusammenfasse, sodass ein Test mehrere Asserts hat
 
 	/**
 	 * 
@@ -249,6 +250,7 @@ public class SchiffeVersenkenTest {
 		sv.setShip(4, 5, Ship.DESTROYER, 3, true); // zuviel
 
 	}
+	
 
 	@Test(expected = zuVieleSchiffeException.class)
 	public void testsetShip018()
@@ -257,6 +259,26 @@ public class SchiffeVersenkenTest {
 		SchiffeVersenken sv = schiffeVersenkenImpl();
 		sv.setShip(1, 1, Ship.BATTLESHIP, 5, true);
 		sv.setShip(2, 2, Ship.BATTLESHIP, 5, true); // zuviel
+
+	}
+	@Test(expected = zuVieleSchiffeException.class)
+	public void testsetShip017AllShips()
+			throws InvalideEingabeException, invalideLaengenEingabeException, InvalideRichtungException,
+			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
+		SchiffeVersenken sv = schiffeVersenkenImpl();
+		sv.setShip(4, 1, Ship.SUBMARINE, 2, true);
+		sv.setShip(8, 1, Ship.SUBMARINE, 2, true);
+		sv.setShip(9, 1, Ship.SUBMARINE, 2, true);
+		sv.setShip(10, 1, Ship.SUBMARINE, 2, true);
+		sv.setShip(1, 1, Ship.DESTROYER, 3, true);
+		sv.setShip(2, 2, Ship.DESTROYER, 3, true);
+		sv.setShip(3, 3, Ship.DESTROYER, 3, true);
+		sv.setShip(5, 1, Ship.CRUISER, 4, true);
+		sv.setShip(6, 1, Ship.CRUISER, 4, true);
+		sv.setShip(7, 1, Ship.BATTLESHIP, 5, true);
+		sv.setShip(1, 10, Ship.BATTLESHIP, 5, false);
+		
+		
 
 	}
 

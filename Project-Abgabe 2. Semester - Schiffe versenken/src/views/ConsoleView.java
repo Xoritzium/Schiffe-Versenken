@@ -1,7 +1,9 @@
-package SchiffeVersenken;
+package views;
 
-public class ConsoleView {
+public class ConsoleView{
 
+	
+	
 	public ConsoleView() {
 		System.out.println("---- Initalizing the empty Field ----");
 		updateField(new boolean[10][10]);
@@ -24,5 +26,10 @@ public class ConsoleView {
 		}
 		System.out.println("\n");
 	}
+
+
+
+
+	
 
 }
