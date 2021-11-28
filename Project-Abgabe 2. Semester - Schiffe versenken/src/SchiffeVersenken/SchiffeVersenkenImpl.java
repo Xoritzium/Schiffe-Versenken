@@ -16,7 +16,8 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 
 // Das Spielfeld. Es gibt insgesamt Zwei Objekte Schiffe Versenken, diese werden entsprechend angesteuert!
 	private Field theField;
-
+// der aktuelle Schuss
+	private Shot shot;
 	/**
 	 * allgemeiner Constructor
 	 */
@@ -58,7 +59,7 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 	 * @throws InvalideEingabeException
 	 */
 	public Shot shot(int x, int y) throws InvalideEingabeException {
-		Shot shot = new Shot(x, y);
+		 shot = new Shot(x, y);
 
 		validCoord(x);
 		validCoord(y);
@@ -200,7 +201,11 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 
 		}
 	}
-
+/**
+ * 
+ * @param ship
+ * @throws zuVieleSchiffeException
+ */
 	private void alternativeEnoughShips(Ship ship) throws zuVieleSchiffeException {
 		if (ship == Ship.BATTLESHIP) {
 			countBattleship++;
@@ -263,6 +268,11 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 	
 	public Field getTheField() {
 		return theField;
+	}
+
+	@Override
+	public Shot getShot() {
+		return shot;
 	}
 	
 	

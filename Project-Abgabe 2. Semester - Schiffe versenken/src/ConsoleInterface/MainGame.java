@@ -1,6 +1,5 @@
 package ConsoleInterface;
 
-import java.io.BufferedReader;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -8,25 +7,45 @@ import SchiffeVersenken.*;
 import views.ConsoleView;
 
 public class MainGame {
-	// brauche ich die Variablen ?
+
 	private SchiffeVersenken pOne;
 	private SchiffeVersenken pTwo;
 	ConsoleView cv;
-
+//TODO
 	// final strings schreiben !
+	// String, dass die EingabeBefehle erklärt
 	// clear methode in SChiffeVersenken falls ein Idiot das Feld so zubaut, dass
 	// man nicht alle Schiff setzen kann/ remove
 
+	private final String CUT = "------------------------------------------";
 	private final String INPUT_LINE_EXPLANATION = "Bitte gib die Koordinaten, Schiffsnamen und Ausrichtung,\ngetrennt einem Komma, an: "
 			+ "X-Koordinate, Y-Koordinate, Namen, Ausrichtung";
 	private final String INPUT_EXPLANATION = "X und Y Koordinaten: Zahl zwischen 1 und 10\n"
 			+ "Name: battleship,cruiser,destroyer,submarine\n"
 			+ "Ausrichtung: v für vertikale Ausrichtung, h für horizontale";
+	private final String RULES = "1 - Schiffe dürfen sich nicht ueberkreuzen\n"
+			+ "2 - Schiffe sind immer gerade ausgerichtet (vertikal bzw. horizontal)\n"
+			+ "3 - es gibt insegesamt 10 Schiffe, in den Klammern ist jeweils die Laenge angegeben:\n"
+			+ "----ein Battleship (5)\n" + "----zwei Cruiser (4)\n" + "----drei Destroyer (3)\n"
+			+ "----vier Submarines (2)\n"
+			+ "4 - Es wird immer abwechselnd geschossen, trifft ein Spieler darf er noch einmal schießen";
+	private final String RULES_NAVIGATION = "1 - Regelwerk schließen\n" + "0 - Spiel beenden";
+
 	private final String ENTER = "enter: ";
 	private final String ALL_SHIPS_SET = "Es sind bereits alle Schiffe gesetzt worden.";
 	private final String KEIN_SCHIFFSNAME_ERKANNT = "Der eingegebene Schiffsname wurde nicht erkannt";
 	private final String KEINE_AUSRICHTUNG_ERKANNT = "Die eingegebene Ausrichtung des Schiffes ist unbekannt!";
 	private final String UENGULTIGE_EINGABE = "die Eingabe ist ungültig!";
+	private final String INVALIDE_EINGABE = "Die X oder Y Koordinate ist ungültig, valide Werte liegen zwischen 1 und 10.";
+	private final String BELEGTES_FELD = "Das Schiff überlappt mit einem anderen Schiff, sie dürfen nicht übereinanderliegen.";
+	private final String SCHIFF_UEBER_BORDER = "Das Schiff ragt über die Spielfeldkante hinaus !";
+	private final String EXIT = "Möchtest du das Spiel wirklich beenden ?: 0 = exit, alle anderen Zahlen = weiterspielen";
+
+	private final String STARTSCREEN = "------Willkommen zu Schiffe Versenken------ \n"
+			+ "------------------------------------------ \n" + "Jeder Spieler bekommt ein Feld, der Spieler\n"
+			+ "1 - Spiel starten\n" + "2 - Regelwerk\n" + "0 - Spiel verlassen\n";
+	private final String WON = "Du hast gewonnen, Gratulation";
+	private final String GOODBYE = "Spiel beendet!";
 
 	public MainGame(SchiffeVersenken pOne, SchiffeVersenken pTwo) {
 		this.pOne = pOne;
@@ -45,9 +64,8 @@ public class MainGame {
 		Random random = new Random();
 		boolean startingPlayer = random.nextBoolean();
 
-		System.out.println("------Willkommen zu Schiffe Versenken------ \n"
-				+ "------------------------------------------ \n" + "Jeder Spieler bekommt ein Feld, der Spieler\n"
-				+ "1 - Spiel starten\n" + "0 - Spiel verlassen\n" + "bitte eingeben:");
+		System.out.println(STARTSCREEN);
+		System.out.println(ENTER);
 
 		int gameState = 0;
 		// Spiel starten oder schließen
@@ -55,7 +73,7 @@ public class MainGame {
 		while (true) {
 			if (scanner.hasNextInt()) {
 				gameState = scanner.nextInt();
-				if (gameState == 0 || gameState == 1) {
+				if (gameState == 0 || gameState == 1 || gameState == 2) {
 					break;
 				} else {
 					System.out.println("Bitte einen validen Wert eingeben ! [0-1]");
@@ -68,16 +86,22 @@ public class MainGame {
 				System.out.println("es beginnt Spieler 1!");
 				// Spieler 1 beginnt und das Spiel läuft
 				runGame(p1, p2);
+				startScreen(p1, p2);
 
 			} else {
 				System.out.println("es beginnt Spieler 2!");
 				// Spieler 2 beginnt, Spiel läuft
 				runGame(p2, p1);
+				startScreen(p1, p2);
 			}
 			break;
 		case 0:
-			System.out.println("Tschau Kakao!");
+			System.out.println(GOODBYE);
 			System.exit(0);
+			break;
+		case 2:
+			rules();
+			break;
 		}
 
 	}
@@ -105,11 +129,11 @@ public class MainGame {
 	private void settingPhase(SchiffeVersenken player) {
 		boolean set = true;
 
-		Scanner readSet = new Scanner(System.in);
 		String input;
 
 		System.out.println(INPUT_LINE_EXPLANATION);
 		System.out.println(INPUT_EXPLANATION);
+		System.out.println(CUT);
 		// Schiff setzen
 		while (set) {
 			/*
@@ -119,12 +143,26 @@ public class MainGame {
 			 */
 			try {
 				System.out.println(ENTER);
-				 input = readSet.next();
+				input = readInput();
 				setInputToSetShip(player, input);
-			} catch (Exception zuVieleSchiffeException) {
+			} catch (zuVieleSchiffeException e) {
 				System.out.println(ALL_SHIPS_SET);
+				System.out.println(CUT);
 				break;
-				// hier müssen mehrere Catchblöcke hin ! für jede geworfene Exception einer !
+			} catch (InvalideEingabeException e) {
+				System.out.println(INVALIDE_EINGABE);
+				System.out.println(CUT);
+			} catch (invalideLaengenEingabeException e) {
+				System.out.println(KEIN_SCHIFFSNAME_ERKANNT);
+				System.out.println(CUT);
+
+			} catch (SchiffSetFeldBelegtException e) {
+				System.out.println(BELEGTES_FELD);
+				System.out.println(CUT);
+
+			} catch (InvalideSchiffSetPositionExecption e) {
+				System.out.println(SCHIFF_UEBER_BORDER);
+				System.out.println(CUT);
 
 			}
 
@@ -140,29 +178,51 @@ public class MainGame {
 	 */
 	private void shotingPhase(SchiffeVersenken p1, SchiffeVersenken p2) {
 
+		boolean win = false;
+		while (win == false) {
+			// exit Bedingung
+			if (p1.getShot().getWon() || p2.getShot().getWon()) {
+				win = true;
+			}
+
+			System.out.println(WON);
+		}  
+
 	}
-/**
- * 
- * @param player
- * @param in
- * @return
- * @throws InvalideEingabeException
- * @throws invalideLaengenEingabeException
- * @throws SchiffSetFeldBelegtException
- * @throws zuVieleSchiffeException
- * @throws InvalideSchiffSetPositionExecption
- */
+
+	/**
+	 * 
+	 * @param player
+	 * @param in
+	 * @return
+	 * @throws InvalideEingabeException
+	 * @throws invalideLaengenEingabeException
+	 * @throws SchiffSetFeldBelegtException
+	 * @throws zuVieleSchiffeException
+	 * @throws InvalideSchiffSetPositionExecption
+	 */
 	private boolean setInputToSetShip(SchiffeVersenken player, String in)
 			throws InvalideEingabeException, invalideLaengenEingabeException, SchiffSetFeldBelegtException,
 			zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
 		// in bspw: 5 5 Submarine v
 		String[] temp = in.split(",");
-		if (temp.length != 4) {
+
+		if (in.equals("exit")) {
+			exitProgram();
+			return false;
+		} else if (temp.length != 4) {
 			System.out.println(UENGULTIGE_EINGABE);
 			return false;
 		}
-		int x = Integer.parseInt(temp[0]); // x und y Koordinaten rauslesen
-		int y = Integer.parseInt(temp[1]);
+		int x; // x und y Koordinaten rauslesen
+		int y;
+		try {
+			x = Integer.parseInt(temp[0]);
+			y = Integer.parseInt(temp[1]);
+		} catch (NumberFormatException e) {
+			System.out.println(INVALIDE_EINGABE);
+			return false;
+		}
 		temp[2].toLowerCase(); // SChiffsnamen, und damit die Länge rauslesen
 		Ship ship = null;
 		int length = 0;
@@ -206,4 +266,60 @@ public class MainGame {
 		return true;
 	}
 
+	private boolean setInputToSHot(String input) {
+
+	}
+
+	/*
+	 * Beendet das Programm vorzeitig, falls nötig
+	 */
+	private void exitProgram() {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println(EXIT);
+		int ex = scanner.nextInt();
+		switch (ex) {
+		case 0:
+			System.out.println(GOODBYE);
+			System.exit(0);
+			break;
+		default:
+			break;
+		}
+	}
+
+	private String readInput() {
+		Scanner scan = new Scanner(System.in);
+		return scan.nextLine();
+	}
+
+	/**
+	 * gibt das Regelwerk sowie die Möglichkeit zurück ins Hauptmenue zu kehren aus-
+	 */
+	private void rules() {
+		System.out.println(RULES);
+		System.out.println(CUT);
+		System.out.println(RULES_NAVIGATION);
+		System.out.println(ENTER);
+		int returnthis = 0;
+		try {
+
+			returnthis = Integer.parseInt(readInput());
+		} catch (NumberFormatException e) {
+			System.out.println(CUT);
+			System.out.println(UENGULTIGE_EINGABE);
+			rules();
+		}
+		switch (returnthis) {
+		case 1:
+			System.out.println(STARTSCREEN);
+			startScreen(this.pOne, this.pTwo);
+			break;
+		case 0:
+			exitProgram();
+			break;
+		default:
+			System.out.println(UENGULTIGE_EINGABE);
+			rules();
+		}
+	}
 }

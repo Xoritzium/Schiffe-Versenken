@@ -66,6 +66,11 @@ public interface SchiffeVersenken {
 	 * @return
 	 */
 	Field getField();
+	/**
+	 * 
+	 * @return
+	 */
+	Shot getShot();
 
 	
 	
