@@ -11,6 +11,7 @@ public class MainGame {
 	private SchiffeVersenken pOne;
 	private SchiffeVersenken pTwo;
 	ConsoleView cv;
+
 //TODO
 	// final strings schreiben !
 	// String, dass die EingabeBefehle erklärt
@@ -18,7 +19,7 @@ public class MainGame {
 	// man nicht alle Schiff setzen kann/ remove
 
 	private final String CUT = "------------------------------------------";
-	private final String INPUT_LINE_EXPLANATION = "Bitte gib die Koordinaten, Schiffsnamen und Ausrichtung,\ngetrennt einem Komma, an: "
+	private final String INPUT_LINE_EXPLANATION = "Bitte gib die Koordinaten, Schiffsnamen und Ausrichtung,\ngetrennt von einem Komma an: "
 			+ "X-Koordinate, Y-Koordinate, Namen, Ausrichtung";
 	private final String INPUT_EXPLANATION = "X und Y Koordinaten: Zahl zwischen 1 und 10\n"
 			+ "Name: battleship,cruiser,destroyer,submarine\n"
@@ -30,7 +31,7 @@ public class MainGame {
 			+ "----vier Submarines (2)\n"
 			+ "4 - Es wird immer abwechselnd geschossen, trifft ein Spieler darf er noch einmal schießen";
 	private final String RULES_NAVIGATION = "1 - Regelwerk schließen\n" + "0 - Spiel beenden";
-
+	private final String SHOT_TO = "Schuss auf:  (Eingabe: x,y)";
 	private final String ENTER = "enter: ";
 	private final String ALL_SHIPS_SET = "Es sind bereits alle Schiffe gesetzt worden.";
 	private final String KEIN_SCHIFFSNAME_ERKANNT = "Der eingegebene Schiffsname wurde nicht erkannt";
@@ -41,6 +42,8 @@ public class MainGame {
 	private final String SCHIFF_UEBER_BORDER = "Das Schiff ragt über die Spielfeldkante hinaus !";
 	private final String EXIT = "Möchtest du das Spiel wirklich beenden ?: 0 = exit, alle anderen Zahlen = weiterspielen";
 
+	private final String TREFFER = "Treffer, du kannst erneut schießen!";
+	private final String KEIN_TREFFER = "Kein Treffer, dein Gegner ist dran!";
 	private final String STARTSCREEN = "------Willkommen zu Schiffe Versenken------ \n"
 			+ "------------------------------------------ \n" + "Jeder Spieler bekommt ein Feld, der Spieler\n"
 			+ "1 - Spiel starten\n" + "2 - Regelwerk\n" + "0 - Spiel verlassen\n";
@@ -116,8 +119,8 @@ public class MainGame {
 	 */
 	private void runGame(SchiffeVersenken p1, SchiffeVersenken p2) {
 		cv = new ConsoleView(); // initialize the view
-		settingPhase(p1); // set the ships
-		settingPhase(p2);
+		settingPhase(p1); // set the ships starting player
+		settingPhase(p2); // set ships for second player
 		shotingPhase(p1, p2); // shoting to win
 	}
 
@@ -127,7 +130,7 @@ public class MainGame {
 	 * @param player
 	 */
 	private void settingPhase(SchiffeVersenken player) {
-		boolean set = true;
+		int count = 0;
 
 		String input;
 
@@ -135,7 +138,7 @@ public class MainGame {
 		System.out.println(INPUT_EXPLANATION);
 		System.out.println(CUT);
 		// Schiff setzen
-		while (set) {
+		while (count < player.getShipsCount()) {
 			/*
 			 * setShip: xKoord yKoord Name Ausrichtung xKoord,yKoord == ints [1-10] Name ==
 			 * Name [Battleship, Submarine,Cruiser, Destroyer] Ausrichtung == h,v [=
@@ -145,6 +148,7 @@ public class MainGame {
 				System.out.println(ENTER);
 				input = readInput();
 				setInputToSetShip(player, input);
+				count++;
 			} catch (zuVieleSchiffeException e) {
 				System.out.println(ALL_SHIPS_SET);
 				System.out.println(CUT);
@@ -173,20 +177,64 @@ public class MainGame {
 	/**
 	 * läuft, bis jemand gewonnen hat
 	 * 
-	 * @param p1
+	 * @param p1 der Spieler, der anfängt, wer das ist, wird hier nicht entschieden
 	 * @param p2
 	 */
 	private void shotingPhase(SchiffeVersenken p1, SchiffeVersenken p2) {
-
+		boolean player = true;
 		boolean win = false;
+		Shot tempShot; // noetig zur Ausgabe von nextPlayer und getWon
+
 		while (win == false) {
 			// exit Bedingung
-			if (p1.getShot().getWon() || p2.getShot().getWon()) {
-				win = true;
+			try {
+				if (player) { // player = true, player 1 ist dran
+					//System.out.println("Spieler 1 ist dran");
+					//cv.updateFieldOnShot(player, p1.getField().getWholeField(), p2.getShotField().getWholeField());
+					System.out.println(SHOT_TO);
+					System.out.println(ENTER);
+					String input = readInput();
+					tempShot = setInputToShot(player, input, p1, p2);
+					// wenn spieler 1 schießt, muss der Schuss auf das Feld von
+					if (tempShot.getTreffer()) {
+						player = true;
+						System.out.println(TREFFER);
+						System.out.println(CUT);
+					} else {
+						System.out.println(KEIN_TREFFER);
+						System.out.println(CUT);
+						player = false;
+					}
+				} else { // player = false, Spieler 2 ist dran
+					//cv.updateFieldOnShot(player, p2.getField().getWholeField(), p1.getShotField().getWholeField());
+					System.out.println(SHOT_TO);
+					System.out.println(ENTER);
+					String input = readInput();
+					tempShot = setInputToShot(player, input, p2, p1);
+
+					// wenn Spieler 2 schießt muss der Schuss auf das Feld von p1.
+					if (tempShot.getTreffer()) {
+						player = false;
+						System.out.println(TREFFER);
+						System.out.println(CUT);
+					} else {
+						System.out.println(KEIN_TREFFER);
+						System.out.println(CUT);
+						player = true;
+					}
+				}
+				// exit Bedingung und Sieger
+				if (tempShot.getWon()) {
+					win = true;
+					break;
+				}
+			} catch (InvalideEingabeException e) {
+				System.out.println(INVALIDE_EINGABE);
+				System.out.println(CUT);
 			}
 
-			System.out.println(WON);
-		}  
+		}
+		System.out.println(WON);
 
 	}
 
@@ -204,7 +252,7 @@ public class MainGame {
 	private boolean setInputToSetShip(SchiffeVersenken player, String in)
 			throws InvalideEingabeException, invalideLaengenEingabeException, SchiffSetFeldBelegtException,
 			zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
-		// in bspw: 5 5 Submarine v
+		// in bspw: 5,5,submarine,v
 		String[] temp = in.split(",");
 
 		if (in.equals("exit")) {
@@ -262,11 +310,36 @@ public class MainGame {
 		// Schiff mit eingelesenen Werten aufs Feld setzen.
 		player.setShip(x, y, ship, length, direction);
 		// update the Field
-		cv.updateField(player.getField().getWholeField());
+		cv.updateFieldOnSetShip(player.getField().getWholeField());
 		return true;
 	}
 
-	private boolean setInputToSHot(String input) {
+	/**
+	 * 
+	 * @param input
+	 * @param actingPlayer der Spieler, der an der dran ist.
+	 * @return
+	 * @throws InvalideEingabeException
+	 */
+	private Shot setInputToShot(boolean activePlayer, String input, SchiffeVersenken actingPlayer,
+			SchiffeVersenken shotedPlayer) throws InvalideEingabeException {
+		// bspw: x,y = 5,2, oder exit
+		if (input.equals("exit")) {
+			exitProgram();
+		}
+		String[] temp = input.split(",");
+		if (temp.length != 2) {
+			return actingPlayer.shot(0, 0); // causes "InvalideEingabeException" which will end this loop of shooting
+		}
+
+		int x = Integer.parseInt(temp[0]);
+		int y = Integer.parseInt(temp[1]);
+		Shot tempShot = shotedPlayer.shot(x, y);
+		// print own field + checkField
+		cv.updateFieldOnShot(activePlayer, actingPlayer.getField().getWholeField(),
+				shotedPlayer.getShotField().getWholeField());
+		// Schuss auf den, der nicht dran ist
+		return tempShot;
 
 	}
 

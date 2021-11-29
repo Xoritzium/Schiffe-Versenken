@@ -61,17 +61,29 @@ public interface SchiffeVersenken {
 	 */
 	Shot shot(int x, int y) throws InvalideEingabeException;
 
-	/**gibt das gesamte Feld zurück.
+	/**
+	 * gibt das gesamte Feld zurück.
 	 * 
 	 * @return
 	 */
 	Field getField();
+
+	/**
+	 * 
+	 * @return
+	 */
+	Field getShotField();
+
 	/**
 	 * 
 	 * @return
 	 */
 	Shot getShot();
 
-	
-	
+	/**
+	 * 
+	 * @return
+	 */
+	public int getShipsCount();
+
 }

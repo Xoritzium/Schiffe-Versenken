@@ -6,23 +6,38 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 	private final int NUM_OF_DESTROYERS = 3;
 	private final int NUM_OF_CRUISERS = 2;
 	private final int NUM_OF_BATTLESHIPS = 1;
-	private final int TOTAL_NUM_OF_Ships = NUM_OF_BATTLESHIPS + NUM_OF_CRUISERS + NUM_OF_DESTROYERS + NUM_OF_SUBMARINES; // insg:
-																															// 10
+	/**
+	 *
+	 */
+	// private final int TOTAL_NUM_OF_Ships = NUM_OF_BATTLESHIPS + NUM_OF_CRUISERS +
+	// NUM_OF_DESTROYERS + NUM_OF_SUBMARINES; // insg:
+
+	// zum Testen alternative maximale Schiffsmenge
+	private final int TOTAL_NUM_OF_Ships = 1; // 10
 	private int countSubmarines;
 	private int countDestroyers;
 	private int countCruisers;
 	private int countBattleship;
 	private int countNumOfShips;
 
-// Das Spielfeld. Es gibt insgesamt Zwei Objekte Schiffe Versenken, diese werden entsprechend angesteuert!
+	/*
+	 * Das Spielfeld. Es gibt insgesamt Zwei Objekte Schiffe Versenken, diese werden
+	 * entsprechend angesteuert! Nur für die gesetzten Schiffe
+	 * 
+	 */
 	private Field theField;
+	// Ueberpruefungsfeld, dort werden die Schüsse vermerkt || also nur bei Shot
+	// Aufruf
+	private Field ShotField;
 // der aktuelle Schuss
 	private Shot shot;
+
 	/**
 	 * allgemeiner Constructor
 	 */
 	public SchiffeVersenkenImpl() {
 		theField = new Field();
+		ShotField = new Field();
 
 	}
 
@@ -48,7 +63,7 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 		// fügt das Schiff dem Spielfeld hinzu
 		theField.updateFieldOnSet(actualship);
 		// Debug Kram System.out.println("Setting a Ship");
-		System.out.println("SChiffe gesetzt: " +countNumOfShips);
+		System.out.println("SChiffe gesetzt: " + countNumOfShips);
 		return actualship;
 
 	}
@@ -59,13 +74,16 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 	 * @throws InvalideEingabeException
 	 */
 	public Shot shot(int x, int y) throws InvalideEingabeException {
-		 shot = new Shot(x, y);
+		shot = new Shot(x, y);
 
 		validCoord(x);
 		validCoord(y);
 		shot.calculateHit(x, y, theField.getSingleField(x, y));
+		//das beschossene Feld bekommt ein Upate
 		theField.updateFieldOnHit(shot);
 		shot.setWin(theField);
+		ShotField.shoted(x, y); // updated das Schussfeld, damit der entsprechende Spieler weiß, auf welches
+								// Koords er schon geschossen hat.
 		// debug Kram System.out.println("shot auf: x: " + x + "y: " + y);
 
 		return shot;
@@ -73,9 +91,6 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 	}
 
 ///////////////////// Hilfsmethoden////////////////////
-
-	//////////////// Validierungsmethoden /////////
-
 	/**
 	 * Überprüft, ob die Eingabe innerhalb der gegebenen Parameter liegt
 	 * 
@@ -152,10 +167,10 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 	private void validBorderPositions(int x, int y, int length, boolean direction)
 			throws InvalideSchiffSetPositionExecption {
 		// ragt nach rechts raus
-		if (x + (length - 1) >= 10 && direction == false) {
+		if (x + (length - 1) > 10 && direction == false) {
 			throw new InvalideSchiffSetPositionExecption();
 			// ragt nach unten raus
-		} else if (y + (length - 1) >= 10 && direction == true) {
+		} else if (y + (length - 1) >10 && direction == true) {
 			throw new InvalideSchiffSetPositionExecption();
 		}
 
@@ -180,7 +195,7 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 		case DESTROYER:
 			countDestroyers++;
 			countNumOfShips++;
-			if (countDestroyers > NUM_OF_DESTROYERS) {
+			if (countDestroyers > NUM_OF_DESTROYERS || countNumOfShips > TOTAL_NUM_OF_Ships) {
 				throw new zuVieleSchiffeException();
 			}
 			break;
@@ -201,11 +216,12 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 
 		}
 	}
-/**
- * 
- * @param ship
- * @throws zuVieleSchiffeException
- */
+
+	/**
+	 * 
+	 * @param ship
+	 * @throws zuVieleSchiffeException
+	 */
 	private void alternativeEnoughShips(Ship ship) throws zuVieleSchiffeException {
 		if (ship == Ship.BATTLESHIP) {
 			countBattleship++;
@@ -254,27 +270,32 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 			}
 		}
 	}
+
 ////////////////////// Getter //////////////////////
 	public Field getField() {
 		return theField;
 	}
-	
-	
+
 	public int getCountOfShips() {
 		return countNumOfShips;
 	}
-	
-	
-	
+
 	public Field getTheField() {
 		return theField;
+	}
+	public Field getShotField() {
+		return ShotField;
 	}
 
 	@Override
 	public Shot getShot() {
 		return shot;
 	}
-	
-	
-	
+
+	@Override
+	public int getShipsCount() {
+		
+		return TOTAL_NUM_OF_Ships;
+	}
+
 }

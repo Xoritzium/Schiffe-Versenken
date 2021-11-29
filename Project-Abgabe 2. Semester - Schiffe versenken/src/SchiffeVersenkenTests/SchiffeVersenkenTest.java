@@ -458,10 +458,7 @@ public class SchiffeVersenkenTest {
 	//////////////// allgemeine Tests ///////////////////
 	////////////////////////////////////////////////////
 
-	/*
-	 * @Test(expected = nameTakenException.class) public void testGenerale02() {
-	 * SchiffeVersenken tg = new SchiffeVersenkenImpl("Spanien", "Spanien"); }
-	 */
+	
 	@Test
 	public void runTest01() throws InvalideEingabeException, invalideLaengenEingabeException,
 			SchiffSetFeldBelegtException, zuVieleSchiffeException, InvalideSchiffSetPositionExecption {
@@ -482,4 +479,5 @@ public class SchiffeVersenkenTest {
 		Assert.assertTrue(tg.shot(8, 9).getWon()); // Treffer und gewonnen
 	}
 
+	
 }

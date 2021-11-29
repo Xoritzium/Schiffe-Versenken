@@ -6,14 +6,10 @@ public class Field {
 	 * true: da ist ein Schiff 
 	 * false: freier Platz,
 	 */
-	private boolean[][] field = new boolean[10][10];
+	private boolean[][] field;
 
 	public Field() {
-		for (int i = 0; i < field.length; i++) {
-			for (int j = 0; j < field.length; j++) {
-				field[0][0] = false;
-			}
-		}
+	field = new boolean[10][10];
 	}
 
 	/**
@@ -39,8 +35,7 @@ public class Field {
 	/**
 	 * aktuallisiert die Schüsse, gerade bei Treffer
 	 * 
-	 * @param x
-	 * @param y
+	 * @param Shot, der aktuelle Schuss
 	 */
 	public void updateFieldOnHit(Shot shot) {
 		int trueX = shot.getX() - 1;
@@ -59,6 +54,15 @@ public class Field {
 			shot.setWon(true);
 		}
 
+	}
+	
+	/**
+	 *  update the Shoted Field, where a hit was landed, it
+	 *   will be marked with an "x"
+	 */
+	public void shoted(int x, int y) {
+		field[x-1][y-1] = true;
+		
 	}
 ///////// specialized getter/////////////
 
