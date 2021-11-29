@@ -1,6 +1,6 @@
 package views;
 
-public class ConsoleView{
+public class ConsoleView implements Views{
 
 	
 	

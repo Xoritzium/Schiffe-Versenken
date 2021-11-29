@@ -5,12 +5,13 @@ import java.util.Scanner;
 
 import SchiffeVersenken.*;
 import views.ConsoleView;
+import views.Views;
 
 public class MainGame {
 
 	private SchiffeVersenken pOne;
 	private SchiffeVersenken pTwo;
-	ConsoleView cv;
+	Views cv;
 
 //TODO
 	// final strings schreiben !
@@ -147,8 +148,9 @@ public class MainGame {
 			try {
 				System.out.println(ENTER);
 				input = readInput();
-				setInputToSetShip(player, input);
-				count++;
+				// setInputToSetShip(player, input);
+				if (setInputToSetShip(player, input))
+					count++;
 			} catch (zuVieleSchiffeException e) {
 				System.out.println(ALL_SHIPS_SET);
 				System.out.println(CUT);
@@ -189,8 +191,9 @@ public class MainGame {
 			// exit Bedingung
 			try {
 				if (player) { // player = true, player 1 ist dran
-					//System.out.println("Spieler 1 ist dran");
-					//cv.updateFieldOnShot(player, p1.getField().getWholeField(), p2.getShotField().getWholeField());
+					// System.out.println("Spieler 1 ist dran");
+					// cv.updateFieldOnShot(player, p1.getField().getWholeField(),
+					// p2.getShotField().getWholeField());
 					System.out.println(SHOT_TO);
 					System.out.println(ENTER);
 					String input = readInput();
@@ -206,7 +209,8 @@ public class MainGame {
 						player = false;
 					}
 				} else { // player = false, Spieler 2 ist dran
-					//cv.updateFieldOnShot(player, p2.getField().getWholeField(), p1.getShotField().getWholeField());
+					// cv.updateFieldOnShot(player, p2.getField().getWholeField(),
+					// p1.getShotField().getWholeField());
 					System.out.println(SHOT_TO);
 					System.out.println(ENTER);
 					String input = readInput();
@@ -331,9 +335,15 @@ public class MainGame {
 		if (temp.length != 2) {
 			return actingPlayer.shot(0, 0); // causes "InvalideEingabeException" which will end this loop of shooting
 		}
-
-		int x = Integer.parseInt(temp[0]);
-		int y = Integer.parseInt(temp[1]);
+		int x = 0;
+		int y = 0;
+		try {
+			x = Integer.parseInt(temp[0]);
+			y = Integer.parseInt(temp[1]);
+		} catch (NumberFormatException e) {
+			return actingPlayer.shot(0, 0); // causes "InvalideEingabeException" which will end actual loop of shooting
+											// and jumps to the next
+		}
 		Shot tempShot = shotedPlayer.shot(x, y);
 		// print own field + checkField
 		cv.updateFieldOnShot(activePlayer, actingPlayer.getField().getWholeField(),
