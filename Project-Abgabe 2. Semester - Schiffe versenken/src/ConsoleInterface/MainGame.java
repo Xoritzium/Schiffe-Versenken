@@ -12,10 +12,7 @@ public class MainGame {
 	private SchiffeVersenken pOne;
 	private SchiffeVersenken pTwo;
 	Views cv;
-
-//TODO
-	// final strings schreiben !
-	// String, dass die EingabeBefehle erklärt
+	//
 	// clear methode in SChiffeVersenken falls ein Idiot das Feld so zubaut, dass
 	// man nicht alle Schiff setzen kann/ remove
 
