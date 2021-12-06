@@ -10,7 +10,6 @@ public class Shot {
 	int y;
 
 	public Shot(int x, int y) {
-
 		this.x = x;
 		this.y = y;
 	}
@@ -19,9 +18,9 @@ public class Shot {
 	 * berechnet bei jedem Schuss, ob es sich um einen Treffer handelt und gibz
 	 * entsprechend True/False zurück
 	 * 
-	 * @param x
-	 * @param y
-	 * @return
+	 * @param x xKoordinate
+	 * @param y yKoordinate
+	 * @return treffer true/false je nach hit
 	 */
 	public boolean calculateHit(int x, int y, boolean infield) {
 		if (infield == true) {
@@ -33,8 +32,8 @@ public class Shot {
 	/**
 	 * gibt solange false zurück, solange noch Schiffsreste auf dem Feld liegen
 	 * 
-	 * @param field
-	 * @return
+	 * @param field das jeweilige Feld des Spielers
+	 * @return true, wenn das Feld "leergeschossen" wurde und false solange dem nicht der Fall ist
 	 */
 	public boolean setWin(Field field) {
 		for (int i = 1; i < field.getFieldLength(); i++) {
@@ -79,7 +78,7 @@ public class Shot {
 		return won;
 	}
 
-/////////////Setter
+	/////////////Setter//////////////////
 	public void setWon(boolean b) {
 		won = b;
 	}

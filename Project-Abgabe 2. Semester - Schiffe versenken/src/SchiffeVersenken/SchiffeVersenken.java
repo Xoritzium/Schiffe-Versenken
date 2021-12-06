@@ -43,8 +43,8 @@ public interface SchiffeVersenken {
 	 *                                         auﬂerhalb des Spiels liegt.
 	 * @throws SchiffSetFeldBelegtException    auf dem Feld befindet sich bereits
 	 *                                         ein Schiff
-	 * @throws @throws
-	 * @deprecated
+	 * 
+	 * @deprecated Schade drum
 	 */
 	oneShip setShip(int x, int y, Ship ship, int length, boolean dir)
 			throws InvalideEingabeException, invalideLaengenEingabeException, SchiffSetFeldBelegtException,

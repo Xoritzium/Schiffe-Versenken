@@ -1,14 +1,14 @@
 package views;
 
-public class ConsoleView implements Views{
+public class ConsoleView implements Views {
 
-	
-	
+	/**
+	 * initialisiert die Konsolenview
+	 */
 	public ConsoleView() {
 		System.out.println("---- Initalizing the empty Field ----");
-		// ueberdenken, keine visuelle Aufbereitung ?
 		updateFieldOnSetShip(new boolean[10][10]);
-			}
+	}
 
 	public void updateFieldOnSetShip(boolean[][] field) {
 		System.out.println("-------------------------------- \n");
@@ -27,17 +27,12 @@ public class ConsoleView implements Views{
 		}
 		System.out.println("\n");
 	}
-	/**
-	 * 
-	 * @param aktivePlayer der spieler, der dran sit
-	 * @param field Das Schiffsfeld vom selben Spieler
-	 * @param checkField Das Ueberpueffeld vom selben Spieler
-	 */
-	public void updateFieldOnShot(boolean aktivePlayer,boolean[][] field, boolean[][] checkField) {
-		
+
+	public void updateFieldOnShot(boolean aktivePlayer, boolean[][] field, boolean[][] checkField) {
+
 		if (aktivePlayer) {
 			System.out.println("-----------------Player 1-----------------------");
-		}else {
+		} else {
 			System.out.println("-----------------Player 2-----------------------");
 		}
 		System.out.println("  Your Set Ships	   ControlField of your shots");
@@ -47,7 +42,7 @@ public class ConsoleView implements Views{
 			for (int y = 0; y < field.length; y++) {
 				if (field[y][x] == true) {
 					System.out.print("x ");
-					
+
 				} else {
 					System.out.print(". ");
 				}
@@ -55,7 +50,7 @@ public class ConsoleView implements Views{
 
 			System.out.print("|" + (x + 1));
 			System.out.print("		");
-			for(int i =0; i < checkField.length; i++) {
+			for (int i = 0; i < checkField.length; i++) {
 				if (checkField[i][x] == true) {
 					System.out.print("o ");
 				} else {
@@ -66,10 +61,5 @@ public class ConsoleView implements Views{
 			System.out.print("\n");
 		}
 	}
-
-
-
-
-	
 
 }

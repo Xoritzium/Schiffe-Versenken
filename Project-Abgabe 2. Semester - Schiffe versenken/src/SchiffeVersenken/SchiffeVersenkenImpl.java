@@ -188,28 +188,28 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 		case SUBMARINE:
 			countSubmarines++;
 			countNumOfShips++;
-			if (countSubmarines > NUM_OF_SUBMARINES || countNumOfShips >= TOTAL_NUM_OF_Ships) {
+			if (countSubmarines > NUM_OF_SUBMARINES || countNumOfShips > TOTAL_NUM_OF_Ships) {
 				throw new zuVieleSchiffeException();
 			}
 			break;
 		case DESTROYER:
 			countDestroyers++;
 			countNumOfShips++;
-			if (countDestroyers > NUM_OF_DESTROYERS || countNumOfShips >= TOTAL_NUM_OF_Ships) {
+			if (countDestroyers > NUM_OF_DESTROYERS || countNumOfShips > TOTAL_NUM_OF_Ships) {
 				throw new zuVieleSchiffeException();
 			}
 			break;
 		case CRUISER:
 			countCruisers++;
 			countNumOfShips++;
-			if (countCruisers > NUM_OF_CRUISERS || countNumOfShips >= TOTAL_NUM_OF_Ships) {
+			if (countCruisers > NUM_OF_CRUISERS || countNumOfShips > TOTAL_NUM_OF_Ships) {
 				throw new zuVieleSchiffeException();
 			}
 			break;
 		case BATTLESHIP:
 			countBattleship++;
 			countNumOfShips++;
-			if (countBattleship > NUM_OF_BATTLESHIPS || countNumOfShips >= TOTAL_NUM_OF_Ships) {
+			if (countBattleship > NUM_OF_BATTLESHIPS || countNumOfShips > TOTAL_NUM_OF_Ships) {
 				throw new zuVieleSchiffeException();
 			}
 			break;

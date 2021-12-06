@@ -8,14 +8,15 @@ import views.ConsoleView;
 import views.Views;
 
 public class MainGame {
-
+	// Spielfeld und Logik des ersten Spielers
 	private SchiffeVersenken pOne;
+	// Spielfeld und Logik des zweiten Spielers
 	private SchiffeVersenken pTwo;
+	// eine View, auf der Konsole
 	Views cv;
 	//
-	// clear methode in SChiffeVersenken falls ein Idiot das Feld so zubaut, dass
-	// man nicht alle Schiff setzen kann/ remove
 
+	// Alle nötigen Strings um das User-Interface verständlich zu benutzen
 	private final String CUT = "------------------------------------------";
 	private final String INPUT_LINE_EXPLANATION = "Bitte gib die Koordinaten, Schiffsnamen und Ausrichtung,\ngetrennt von einem Komma an: "
 			+ "X-Koordinate, Y-Koordinate, Namen, Ausrichtung";
@@ -48,9 +49,10 @@ public class MainGame {
 	private final String WON = "Du hast gewonnen, Gratulation";
 	private final String GOODBYE = "Spiel beendet!";
 
+// Konstructor, nur noetig um das Spiel zu starten
 	public MainGame(SchiffeVersenken pOne, SchiffeVersenken pTwo) {
 		this.pOne = pOne;
-		this.pOne = pTwo;
+		this.pTwo = pTwo;
 
 	}
 
@@ -58,12 +60,9 @@ public class MainGame {
 	 * "Startbildschirm" Playerauswahl und erklärte Befehle
 	 * 
 	 * @param p1 SchiffeVersenken für den einen Spieler
-	 * @param p2 SchiffeVersenken für den anderen
+	 * @param p2 SchiffeVersenken für den Anderen
 	 */
 	public void startScreen(SchiffeVersenken p1, SchiffeVersenken p2) {
-
-		Random random = new Random();
-		boolean startingPlayer = random.nextBoolean();
 
 		System.out.println(STARTSCREEN);
 		System.out.println(ENTER);
@@ -81,10 +80,14 @@ public class MainGame {
 				}
 			}
 		}
+
 		switch (gameState) {
 		case 1:
+			Random random = new Random();
+			boolean startingPlayer = random.nextBoolean();
+
 			if (startingPlayer) {
-				System.out.println("es beginnt Spieler 1!");
+				System.out.println("es beginnt Spieler 1!"); // debug, später Verteilung, welcher Rechner beginnt
 				// Spieler 1 beginnt und das Spiel läuft
 				runGame(p1, p2);
 				startScreen(p1, p2);
@@ -125,7 +128,8 @@ public class MainGame {
 	/**
 	 * läuft, bis beide Spieler ihr Feld mit Schiffen besetzt haben
 	 * 
-	 * @param player
+	 * @param player Spielfeld des aktuellen Spielers, der an der Reihe ist, sein
+	 *               Feld vorzubereiten
 	 */
 	private void settingPhase(SchiffeVersenken player) {
 		int count = 0;
@@ -174,10 +178,11 @@ public class MainGame {
 	}
 
 	/**
-	 * läuft, bis jemand gewonnen hat
+	 * läuft, bis jemand gewonnen hat, übernimmt beide Spielfelder, da der
+	 * schießende Spieler jeweils auf das Spielfeld der anderen schießt.
 	 * 
 	 * @param p1 der Spieler, der anfängt, wer das ist, wird hier nicht entschieden
-	 * @param p2
+	 * @param p2 der darauf folgende Spieler
 	 */
 	private void shotingPhase(SchiffeVersenken p1, SchiffeVersenken p2) {
 		boolean player = true;
@@ -188,14 +193,11 @@ public class MainGame {
 			// exit Bedingung
 			try {
 				if (player) { // player = true, player 1 ist dran
-					// System.out.println("Spieler 1 ist dran");
-					// cv.updateFieldOnShot(player, p1.getField().getWholeField(),
-					// p2.getShotField().getWholeField());
 					System.out.println(SHOT_TO);
 					System.out.println(ENTER);
 					String input = readInput();
 					tempShot = setInputToShot(player, input, p1, p2);
-					// wenn spieler 1 schießt, muss der Schuss auf das Feld von
+					// wenn spieler 1 schießt, muss der Schuss auf das Feld von Spieler2
 					if (tempShot.getTreffer()) {
 						player = true;
 						System.out.println(TREFFER);
@@ -206,14 +208,12 @@ public class MainGame {
 						player = false;
 					}
 				} else { // player = false, Spieler 2 ist dran
-					// cv.updateFieldOnShot(player, p2.getField().getWholeField(),
-					// p1.getShotField().getWholeField());
 					System.out.println(SHOT_TO);
 					System.out.println(ENTER);
 					String input = readInput();
 					tempShot = setInputToShot(player, input, p2, p1);
 
-					// wenn Spieler 2 schießt muss der Schuss auf das Feld von p1.
+					// wenn Spieler 2 schießt muss der Schuss auf das Feld von p1 aufgerufen werden.
 					if (tempShot.getTreffer()) {
 						player = false;
 						System.out.println(TREFFER);
@@ -240,15 +240,32 @@ public class MainGame {
 	}
 
 	/**
+	 * Übernimmt den Input und setzt das Schiff an gewünschte Stelle
 	 * 
-	 * @param player
-	 * @param in
-	 * @return
-	 * @throws InvalideEingabeException
-	 * @throws invalideLaengenEingabeException
-	 * @throws SchiffSetFeldBelegtException
-	 * @throws zuVieleSchiffeException
-	 * @throws InvalideSchiffSetPositionExecption
+	 * @param player Dies ist das Feld,auf dem der aktuelle Spieler sein Schiff
+	 *               setzt
+	 * @param in     Input von Koordinaten, Namen und Ausrichtung des Schiffes
+	 * @return true wenn es keine Fehler in der Eingabe gab und false wenn Fehler
+	 *         auftreten, der returnwert ist für das weitere Spiel jedoch irrelevant
+	 * @throws InvalideEingabeException           Falsche Eingabe, beendet aktuelle
+	 *                                            Eingabe
+	 * @throws invalideLaengenEingabeException    Falsche Eingabe, kann hier jedoch
+	 *                                            nicht auftreten
+	 * @throws SchiffSetFeldBelegtException       Es wurde versucht ein Schiff auf
+	 *                                            ein bereits belegtes Feld zu
+	 *                                            platzieren
+	 * @throws zuVieleSchiffeException            Es wurden bereits alle Schiffe
+	 *                                            gesetzt
+	 * @throws InvalideSchiffSetPositionExecption Das Schiff kann dort nicht
+	 *                                            platziert werden weil es zum
+	 *                                            Beispiel aus dem Spielfeld ragt
+	 *                                            
+	 *                                            Alle Exceptions werden
+	 *                                            aufgefangen, ein entsprechender
+	 *                                            hinweisender String ausgegeben und
+	 *                                            es wird in die nächste Iteration
+	 *                                            gesprungen um erneut einen
+	 *                                            SChiffssetzversuch zu starten
 	 */
 	private boolean setInputToSetShip(SchiffeVersenken player, String in)
 			throws InvalideEingabeException, invalideLaengenEingabeException, SchiffSetFeldBelegtException,
@@ -272,7 +289,7 @@ public class MainGame {
 			System.out.println(INVALIDE_EINGABE);
 			return false;
 		}
-		temp[2].toLowerCase(); // SChiffsnamen, und damit die Länge rauslesen
+		temp[2].toLowerCase(); // Schiffsnamen, und damit die Länge rauslesen
 		Ship ship = null;
 		int length = 0;
 		switch (temp[2]) {
@@ -315,12 +332,12 @@ public class MainGame {
 		return true;
 	}
 
-	/**
+	/**Nimmt den Input in Form eines Strings und verarbeitet ihn in einen Schuss umzuwandeln
 	 * 
-	 * @param input
+	 * @param input eingegebener String
 	 * @param actingPlayer der Spieler, der an der dran ist.
-	 * @return
-	 * @throws InvalideEingabeException
+	 * @return den Schuss der generiert wurde, inklusive der Veränderungen im Spielfeld, die daraus resultieren
+	 * @throws InvalideEingabeException Bei invalider Eingabe wird der aktuelle Loop beendet und ein entsprechender String ausgegeben
 	 */
 	private Shot setInputToShot(boolean activePlayer, String input, SchiffeVersenken actingPlayer,
 			SchiffeVersenken shotedPlayer) throws InvalideEingabeException {
@@ -351,7 +368,7 @@ public class MainGame {
 	}
 
 	/*
-	 * Beendet das Programm vorzeitig, falls nötig
+	 * Beendet das Programm vorzeitig, falls nötig oder gewünscht
 	 */
 	private void exitProgram() {
 		Scanner scanner = new Scanner(System.in);
@@ -366,14 +383,17 @@ public class MainGame {
 			break;
 		}
 	}
-
+/**Wann immer ein InputString benötigt wird.
+ * 
+ * @return Input als String
+ */
 	private String readInput() {
 		Scanner scan = new Scanner(System.in);
 		return scan.nextLine();
 	}
 
 	/**
-	 * gibt das Regelwerk sowie die Möglichkeit zurück ins Hauptmenue zu kehren aus-
+	 * gibt das Regelwerk sowie die Moeglichkeit zurück ins Hauptmenue zu kehren aus.
 	 */
 	private void rules() {
 		System.out.println(RULES);
@@ -391,7 +411,6 @@ public class MainGame {
 		}
 		switch (returnthis) {
 		case 1:
-			System.out.println(STARTSCREEN);
 			startScreen(this.pOne, this.pTwo);
 			break;
 		case 0:

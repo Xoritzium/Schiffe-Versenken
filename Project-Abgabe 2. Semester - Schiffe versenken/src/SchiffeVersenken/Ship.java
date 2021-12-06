@@ -1,12 +1,10 @@
 package SchiffeVersenken;
 
 /**
- * 
- * Schiffsnamen, optional
- *
+ * Schiffsnamen
  */
 public enum Ship {
-	
+
 	BATTLESHIP, CRUISER, DESTROYER, SUBMARINE;
-	
+
 }

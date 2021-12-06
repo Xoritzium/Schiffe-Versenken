@@ -427,7 +427,7 @@ public class SchiffeVersenkenTest {
 		shooter.shot(3, 4);
 		shooter.shot(3, 5);
 		shooter.shot(3, 3);
-		String s = " hallo".trim();
+		//String s = " hallo".trim(); ==== Hannes´himselfs peroenliche Anmerkung 
 		Assert.assertTrue(shooter.shot(3, 3).getWon());
 	}
 

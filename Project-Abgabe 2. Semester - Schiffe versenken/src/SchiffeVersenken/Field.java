@@ -33,7 +33,7 @@ public class Field {
 	}
 
 	/**
-	 * aktuallisiert die Schüsse, gerade bei Treffer
+	 * aktuallisiert das Feld bei jedem Schuss und Treffer
 	 * 
 	 * @param Shot, der aktuelle Schuss
 	 */
@@ -58,7 +58,7 @@ public class Field {
 	
 	/**
 	 *  update the Shoted Field, where a hit was landed, it
-	 *   will be marked with an "x"
+	 *   will be marked with @code true
 	 */
 	public void shoted(int x, int y) {
 		field[x-1][y-1] = true;
@@ -72,10 +72,11 @@ public class Field {
 		int trueY = y - 1;
 		return field[trueX][trueY];
 	}
-
+	//get the Size of the Field
 	public int getFieldLength() {
 		return field.length;
 	}
+	// returns the whole Field, mainly used for the Views
 	public boolean[][] getWholeField(){
 		return field;
 	}
