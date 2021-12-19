@@ -1,11 +1,12 @@
 package ConsoleInterface;
 
-import java.util.Random;
+import java.io.IOException;
 import java.util.Scanner;
 
 import SchiffeVersenken.*;
 import views.ConsoleView;
 import views.Views;
+import Streams.*;
 
 public class MainGame {
 	// Spielfeld und Logik des ersten Spielers
@@ -45,7 +46,7 @@ public class MainGame {
 	private final String KEIN_TREFFER = "Kein Treffer, dein Gegner ist dran!";
 	private final String STARTSCREEN = "------Willkommen zu Schiffe Versenken------ \n"
 			+ "------------------------------------------ \n" + "Jeder Spieler bekommt ein Feld, der Spieler\n"
-			+ "1 - Spiel starten\n" + "2 - Regelwerk\n" + "0 - Spiel verlassen\n";
+			+ "1 - Spiel starten\n" + "2 - Spiel beitreten\n" + "3 - Regelwerk\n" + "0 - Spiel verlassen\n";
 	private final String WON = "Du hast gewonnen, Gratulation";
 	private final String GOODBYE = "Spiel beendet!";
 
@@ -73,37 +74,47 @@ public class MainGame {
 		while (true) {
 			if (scanner.hasNextInt()) {
 				gameState = scanner.nextInt();
-				if (gameState == 0 || gameState == 1 || gameState == 2) {
+				if (gameState == 0 || gameState == 1 || gameState == 2 || gameState == 3) {
 					break;
 				} else {
-					System.out.println("Bitte einen validen Wert eingeben ! [0-1]");
+					System.out.println("Bitte einen validen Wert eingeben ! [0-3]");
 				}
 			}
 		}
 
 		switch (gameState) {
 		case 1:
-			Random random = new Random();
-			boolean startingPlayer = random.nextBoolean();
-
-			if (startingPlayer) {
-				System.out.println("es beginnt Spieler 1!"); // debug, später Verteilung, welcher Rechner beginnt
-				// Spieler 1 beginnt und das Spiel läuft
-				runGame(p1, p2);
-				startScreen(p1, p2);
-
-			} else {
-				System.out.println("es beginnt Spieler 2!");
-				// Spieler 2 beginnt, Spiel läuft
-				runGame(p2, p1);
-				startScreen(p1, p2);
+			// Server starten, warten, keine Antwort, von vorne
+			// Antwort und connected, settingphase, auch an Client senden
+			System.out.println("starte Server, warte auf Verbindung");
+			try {
+				Server server = new Server(p1, this);
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block meldung schreiben
+				e1.printStackTrace();
 			}
+
+			break;
+		case 2:
+			// connection Anfrage an Server, warten, wiederholen
+			// settinphase bekommen, dann auf schießen warten
+			System.out.println("verbinde zum Server...");
+			try {
+				Client client = new Client(p2, this);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block meldung schreiben
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			break;
 		case 0:
 			System.out.println(GOODBYE);
 			System.exit(0);
 			break;
-		case 2:
+		case 3:
 			rules();
 			break;
 		}
@@ -118,11 +129,11 @@ public class MainGame {
 	 * @param p1 Spieler 1, er beginnt
 	 * @param p2 Spieler 2, beginnt nie
 	 */
-	private void runGame(SchiffeVersenken p1, SchiffeVersenken p2) {
-		cv = new ConsoleView(); // initialize the view
-		settingPhase(p1); // set the ships starting player
-		settingPhase(p2); // set ships for second player
-		shotingPhase(p1, p2); // shoting to win
+	public void runGame(SchiffeVersenken p1, SchiffeVersenken p2) {
+
+		// settingPhase(p2); // set ships for second player
+		shotingPhase(p1, p2, true); // shoting to win
+
 	}
 
 	/**
@@ -131,7 +142,9 @@ public class MainGame {
 	 * @param player Spielfeld des aktuellen Spielers, der an der Reihe ist, sein
 	 *               Feld vorzubereiten
 	 */
-	private void settingPhase(SchiffeVersenken player) {
+	public Packet settingPhase(SchiffeVersenken player) {
+
+		cv = new ConsoleView(); // initialize the view
 		int count = 0;
 
 		String input;
@@ -174,7 +187,7 @@ public class MainGame {
 			}
 
 		}
-
+		return new Packet(player, null, false);
 	}
 
 	/**
@@ -184,30 +197,39 @@ public class MainGame {
 	 * @param p1 der Spieler, der anfängt, wer das ist, wird hier nicht entschieden
 	 * @param p2 der darauf folgende Spieler
 	 */
-	private void shotingPhase(SchiffeVersenken p1, SchiffeVersenken p2) {
-		boolean player = true;
-		boolean win = false;
+	public Packet shotingPhase(SchiffeVersenken p1, SchiffeVersenken p2, boolean player) {
 		Shot tempShot; // noetig zur Ausgabe von nextPlayer und getWon
-
-		while (win == false) {
-			// exit Bedingung
-			try {
-				if (player) { // player = true, player 1 ist dran
+		try {
+			if (player) { // player = true, player 1 ist dran
+				boolean tempTreffer = true;
+				while (tempTreffer) {
+					cv.updateFieldOnShot(true, p1.getField().getWholeField(), p2.getShotField().getWholeField());
 					System.out.println(SHOT_TO);
 					System.out.println(ENTER);
 					String input = readInput();
 					tempShot = setInputToShot(player, input, p1, p2);
 					// wenn spieler 1 schießt, muss der Schuss auf das Feld von Spieler2
 					if (tempShot.getTreffer()) {
-						player = true;
 						System.out.println(TREFFER);
 						System.out.println(CUT);
 					} else {
 						System.out.println(KEIN_TREFFER);
 						System.out.println(CUT);
-						player = false;
+						tempTreffer = false;
+						return new Packet(p1, p2, false);
 					}
-				} else { // player = false, Spieler 2 ist dran
+					// exit Bedingung und Sieger
+					if (tempShot.getWon()) {
+						System.out.println(WON);
+						System.exit(0);
+					}
+				}
+
+			} else { // player = false, Spieler 2 ist dran
+				boolean tempTreffer = true;
+				while (tempTreffer) {
+					// System.out.println("field client"); // debug
+					cv.updateFieldOnShot(false, p2.getField().getWholeField(), p1.getShotField().getWholeField());
 					System.out.println(SHOT_TO);
 					System.out.println(ENTER);
 					String input = readInput();
@@ -215,28 +237,31 @@ public class MainGame {
 
 					// wenn Spieler 2 schießt muss der Schuss auf das Feld von p1 aufgerufen werden.
 					if (tempShot.getTreffer()) {
-						player = false;
 						System.out.println(TREFFER);
 						System.out.println(CUT);
+						// shotingPhase(p1, p2, player = false);
 					} else {
+						tempTreffer = false;
 						System.out.println(KEIN_TREFFER);
 						System.out.println(CUT);
-						player = true;
+						return new Packet(p1, p2, false);
+					}
+
+					// exit Bedingung und Sieger
+					if (tempShot.getWon()) {
+						System.out.println(WON);
+						System.exit(0);
 					}
 				}
-				// exit Bedingung und Sieger
-				if (tempShot.getWon()) {
-					win = true;
-					break;
-				}
-			} catch (InvalideEingabeException e) {
-				System.out.println(INVALIDE_EINGABE);
-				System.out.println(CUT);
+
 			}
-
+		} catch (InvalideEingabeException e) {
+			System.out.println(INVALIDE_EINGABE);
+			System.out.println(CUT);
+			shotingPhase(p1, p2, true);
 		}
-		System.out.println(WON);
-
+		//// ?????????????????
+		return null;
 	}
 
 	/**
@@ -259,7 +284,7 @@ public class MainGame {
 	 * @throws InvalideSchiffSetPositionExecption Das Schiff kann dort nicht
 	 *                                            platziert werden weil es zum
 	 *                                            Beispiel aus dem Spielfeld ragt
-	 *                                            
+	 * 
 	 *                                            Alle Exceptions werden
 	 *                                            aufgefangen, ein entsprechender
 	 *                                            hinweisender String ausgegeben und
@@ -332,12 +357,18 @@ public class MainGame {
 		return true;
 	}
 
-	/**Nimmt den Input in Form eines Strings und verarbeitet ihn in einen Schuss umzuwandeln
+	/**
+	 * Nimmt den Input in Form eines Strings und verarbeitet ihn in einen Schuss
+	 * umzuwandeln
 	 * 
-	 * @param input eingegebener String
+	 * @param input        eingegebener String
 	 * @param actingPlayer der Spieler, der an der dran ist.
-	 * @return den Schuss der generiert wurde, inklusive der Veränderungen im Spielfeld, die daraus resultieren
-	 * @throws InvalideEingabeException Bei invalider Eingabe wird der aktuelle Loop beendet und ein entsprechender String ausgegeben
+	 * @param shotedPlayer auf den geschossenen Spieler
+	 * @return den Schuss der generiert wurde, inklusive der Veränderungen im
+	 *         Spielfeld, die daraus resultieren
+	 * @throws InvalideEingabeException Bei invalider Eingabe wird der aktuelle Loop
+	 *                                  beendet und ein entsprechender String
+	 *                                  ausgegeben
 	 */
 	private Shot setInputToShot(boolean activePlayer, String input, SchiffeVersenken actingPlayer,
 			SchiffeVersenken shotedPlayer) throws InvalideEingabeException {
@@ -383,17 +414,20 @@ public class MainGame {
 			break;
 		}
 	}
-/**Wann immer ein InputString benötigt wird.
- * 
- * @return Input als String
- */
+
+	/**
+	 * Wann immer ein InputString benötigt wird.
+	 * 
+	 * @return Input als String
+	 */
 	private String readInput() {
 		Scanner scan = new Scanner(System.in);
 		return scan.nextLine();
 	}
 
 	/**
-	 * gibt das Regelwerk sowie die Moeglichkeit zurück ins Hauptmenue zu kehren aus.
+	 * gibt das Regelwerk sowie die Moeglichkeit zurück ins Hauptmenue zu kehren
+	 * aus.
 	 */
 	private void rules() {
 		System.out.println(RULES);

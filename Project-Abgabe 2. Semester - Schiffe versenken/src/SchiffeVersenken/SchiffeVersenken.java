@@ -1,5 +1,7 @@
 package SchiffeVersenken;
 
+import java.io.Serializable;
+
 /**
  * Vorbereitung, Spiel, Spielende
  * 
@@ -25,7 +27,7 @@ package SchiffeVersenken;
  * 
  */
 
-public interface SchiffeVersenken {
+public interface SchiffeVersenken{
 
 	/**
 	 * Setzt ein Schiff an die dafür ausgewählte Stelle

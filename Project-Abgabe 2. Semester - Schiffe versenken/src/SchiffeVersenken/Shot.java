@@ -1,6 +1,8 @@
 package SchiffeVersenken;
 
-public class Shot {
+import java.io.Serializable;
+
+public class Shot implements Serializable{
 
 	boolean treffer;
 	// springt auf true beim letzten Treffer

@@ -9,8 +9,9 @@ public class StartGameClass {
  // stellt die benoetigten Spielerinstanzen zur Verfuegung und startet das Spiel
 		SchiffeVersenken s1 = new SchiffeVersenkenImpl();
 		SchiffeVersenken s2 = new SchiffeVersenkenImpl();
-		MainGame ps = new MainGame(s1, s2);
-		ps.startScreen(s1, s2);
+	
+		MainGame ps = new MainGame(s1, s2); // Ein Rechner
 		
+		ps.startScreen(s1, s2);
 	}
 }

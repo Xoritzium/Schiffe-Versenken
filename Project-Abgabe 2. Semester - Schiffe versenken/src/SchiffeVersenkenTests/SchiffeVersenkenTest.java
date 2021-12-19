@@ -8,10 +8,10 @@ import SchiffeVersenken.SchiffSetFeldBelegtException;
 import SchiffeVersenken.SchiffeVersenken;
 import SchiffeVersenken.SchiffeVersenkenImpl;
 import SchiffeVersenken.Ship;
-import SchiffeVersenken.Shot;
 import SchiffeVersenken.oneShip;
 import SchiffeVersenken.zuVieleSchiffeException;
 import junit.framework.Assert;
+import views.*;
 
 import static org.junit.Assert.*;
 
@@ -479,5 +479,9 @@ public class SchiffeVersenkenTest {
 		Assert.assertTrue(tg.shot(8, 9).getWon()); // Treffer und gewonnen
 	}
 
+	@Test
+	public void ConsoleViewTest01() {
+		Views v = new ConsoleView();
+	}
 	
 }

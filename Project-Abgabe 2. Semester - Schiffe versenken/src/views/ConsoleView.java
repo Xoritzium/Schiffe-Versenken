@@ -6,14 +6,16 @@ public class ConsoleView implements Views {
 	 * initialisiert die Konsolenview
 	 */
 	public ConsoleView() {
-		System.out.println("---- Initalizing the empty Field ----");
 		updateFieldOnSetShip(new boolean[10][10]);
 	}
 
 	public void updateFieldOnSetShip(boolean[][] field) {
-		System.out.println("-------------------------------- \n");
+		
+		System.out.println("---------------------");
+		System.out.println("  Your Set Ships");
+		System.out.println("---------------------");
+
 		System.out.println("1 2 3 4 5 6 7 8 9 10");
-		System.out.println("--------------------");
 		for (int x = 0; x < field.length; x++) {
 			for (int y = 0; y < field.length; y++) {
 				if (field[y][x] == true) {
@@ -22,10 +24,11 @@ public class ConsoleView implements Views {
 					System.out.print(". ");
 				}
 			}
-
-			System.out.print("|" + (x + 1) + " \n");
+		
+			System.out.print("|" + (x + 1));
+			System.out.print("\n");
 		}
-		System.out.println("\n");
+
 	}
 
 	public void updateFieldOnShot(boolean aktivePlayer, boolean[][] field, boolean[][] checkField) {

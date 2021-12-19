@@ -1,6 +1,8 @@
 package SchiffeVersenken;
 
-public class SchiffeVersenkenImpl implements SchiffeVersenken {
+import java.io.Serializable;
+
+public class SchiffeVersenkenImpl implements SchiffeVersenken, Serializable{
 
 	private final int NUM_OF_SUBMARINES = 4;
 	private final int NUM_OF_DESTROYERS = 3;
@@ -9,11 +11,11 @@ public class SchiffeVersenkenImpl implements SchiffeVersenken {
 	/**
 	 *
 	 */
-	 private final int TOTAL_NUM_OF_Ships = NUM_OF_BATTLESHIPS + NUM_OF_CRUISERS +
-	 NUM_OF_DESTROYERS + NUM_OF_SUBMARINES; // insg: 10
+	// private final int TOTAL_NUM_OF_Ships = NUM_OF_BATTLESHIPS + NUM_OF_CRUISERS +
+	 //NUM_OF_DESTROYERS + NUM_OF_SUBMARINES; // insg: 10
 
 	// zum Testen alternative maximale Schiffsmenge
-	//private final int TOTAL_NUM_OF_Ships = 1; // 10
+	private final int TOTAL_NUM_OF_Ships = 1; // 10
 	private int countSubmarines;
 	private int countDestroyers;
 	private int countCruisers;

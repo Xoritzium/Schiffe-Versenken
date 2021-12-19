@@ -1,6 +1,8 @@
 package SchiffeVersenken;
 
-public class Field {
+import java.io.Serializable;
+
+public class Field implements Serializable{
 	/*
 	 * x*y 
 	 * true: da ist ein Schiff 
@@ -42,6 +44,8 @@ public class Field {
 		int trueY = shot.getY() - 1;
 		int iterations = field.length * field.length;
 		field[trueX][trueY] = false;
+	
+		/*
 		for (int x = 0; x < field.length; x++) {
 			for (int y = 0; y < field.length; y++) {
 				if (field[x][y] == true) {
@@ -53,7 +57,7 @@ public class Field {
 		if (iterations != 0) {
 			shot.setWon(true);
 		}
-
+*/
 	}
 	
 	/**
